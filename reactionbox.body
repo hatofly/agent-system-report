@@ -216,7 +216,7 @@ links:
     jointType: prismatic
     jointAxis: Z
     jointId: 0
-    jointRange: &SLIDERANGE [-0.6, 0.6]
+    jointRange: &SLIDERANGE [-0.5, 0.5]
     centerOfMass: [0, 0, 0]
     mass: &REACTION_BASE_MASS 0.5
     inertia: &REACTION_BASE_INERTIA [

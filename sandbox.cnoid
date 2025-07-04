@@ -46,6 +46,7 @@ items:
           name: "AISTSimulator"
           plugin: Body
           class: AISTSimulatorItem
+          is_selected: true
           is_checked: true
           data:
             time_step: 0.001
@@ -80,17 +81,21 @@ items:
           name: "ReactionBox"
           plugin: Body
           class: BodyItem
+          is_selected: true
           is_checked: true
           data:
             file: "reactionbox.body"
             format: CHOREONOID-BODY
-            rootPosition: [ -6.83067298e-06, -7.10955684e-05, 0.949764425 ]
+            rootPosition: [ 4.2942526e-05, 0.000117979974, 0.949770371 ]
             rootAttitude: [
-              0.999999997, 7.46479587e-05, 2.06752347e-05,
-              -7.46485123e-05, 0.999999997, 2.67753072e-05,
-              -2.0673236e-05, -2.67768505e-05, 0.999999999 ]
-            jointDisplacements: [ -35.8242, -0.00215423, -0.00215423, -0.00312622, -0.00312622, 0.00422009, 0.000265611 ]
-            initialJointDisplacements: [ -136.844, 79.466, 79.466, -3.15468, -6.34005, -9.37443, 322.51 ]
+              0.999999938, 0.000350677837, -2.93005663e-05,
+              -0.000350675365, 0.999999935, 8.43056932e-05,
+              2.93301285e-05, -8.4295413e-05, 0.999999996 ]
+            jointDisplacements: [
+              0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+              0, 0, 0, 0, 0, 0, 0, 0 ]
+            initialJointDisplacements: [
+              -136.844, 79.466, 79.466 ]
             initialRootPosition: [ 0, 0, 1 ]
             initialRootAttitude: [
               1, 0, 0,
@@ -137,7 +142,7 @@ views:
     class: SceneView
     mounted: true
     state:
-      editMode: true
+      editMode: false
       viewpointOperationMode: thirdPerson
       visible_polygon_elements: [ face ]
       highlighting: false
@@ -146,9 +151,9 @@ views:
         -
           camera: [ System, Perspective ]
           isCurrent: true
-          eye: [ 1.72284, 11.6561, 5.02084 ]
-          direction: [ -0.159662, -0.891841, -0.423235 ]
-          up: [ -0.0745842, -0.416612, 0.90602 ]
+          eye: [ 7.76146, 6.94445, 7.43733 ]
+          direction: [ -0.571136, -0.511595, -0.64193 ]
+          up: [ -0.478152, -0.428305, 0.766763 ]
         -
           camera: [ System, Orthographic ]
           orthoHeight: 20
@@ -233,7 +238,7 @@ views:
     mounted: true
 toolbars:
   "TimeBar":
-    current_time: 55.2
+    current_time: 1.119
     min_time: 0
     max_time: 57.398
     frame_rate: 1000
@@ -248,7 +253,7 @@ toolbars:
     forward_kinematics: true
     inverse_kinematics: true
     preset_kinematics: true
-    enablePositionDragger: true
+    enablePositionDragger: false
     penetrationBlock: false
     collisionLinkHighlight: false
     snapDistance: 0.025

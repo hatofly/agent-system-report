@@ -1,9 +1,10 @@
 format: ChoreonoidBody
 formatVersion: 1.0
 angleUnit: degree
-name: SimpleTank
+name: ReactionBox
 
 links:
+# MARK:外殻
   - 
     name: CENTER
     translation: [0, 0, 1]
@@ -21,8 +22,8 @@ links:
     translation: [0, 0, -0.8]
     jointType: fixed
     centerOfMass: [0, 0, 0]
-    mass: 1.0
-    inertia: [
+    mass: &PLATEMASS 1.0
+    inertia: &PLATEINERTIA [
       0.1, 0,   0,
       0,   0.1, 0,
       0,   0,   0.1 ]
@@ -42,11 +43,8 @@ links:
     translation: [0, 0, 0.8]
     jointType: fixed
     centerOfMass: [0, 0, 0]
-    mass: 1.0
-    inertia: [
-      0.1, 0,   0,
-      0,   0.1, 0,
-      0,   0,   0.1 ]
+    mass: *PLATEMASS
+    inertia: *PLATEINERTIA
     elements:
       Shape:
         geometry: *SHORTPLATE
@@ -57,11 +55,8 @@ links:
     translation: [0.3 , 0, 0]
     jointType: fixed
     centerOfMass: [0, 0, 0]
-    mass: 1.0
-    inertia: [
-      0.1, 0,   0,
-      0,   0.1, 0,
-      0,   0,   0.1 ]
+    mass: *PLATEMASS
+    inertia: *PLATEINERTIA
     elements:
       Shape:
         geometry: &LONGPLATE
@@ -74,11 +69,8 @@ links:
     translation: [-0.3 , 0, 0]
     jointType: fixed
     centerOfMass: [0, 0, 0]
-    mass: 1.0
-    inertia: [
-      0.1, 0,   0,
-      0,   0.1, 0,
-      0,   0,   0.1 ]
+    mass: *PLATEMASS
+    inertia: *PLATEINERTIA
     elements:
       Shape:
         geometry: *LONGPLATE
@@ -90,11 +82,8 @@ links:
     rotation: [0,0,1, 90]
     jointType: fixed
     centerOfMass: [0, 0, 0]
-    mass: 1.0
-    inertia: [
-      0.1, 0,   0,
-      0,   0.1, 0,
-      0,   0,   0.1 ]
+    mass: *PLATEMASS
+    inertia: *PLATEINERTIA
     elements:
       Shape:
         geometry: *LONGPLATE
@@ -106,23 +95,22 @@ links:
     rotation: [0,0,1, 90]
     jointType: fixed
     centerOfMass: [0, 0, 0]
-    mass: 1.0
-    inertia: [
-      0.1, 0,   0,
-      0,   0.1, 0,
-      0,   0,   0.1 ]
+    mass: *PLATEMASS
+    inertia: *PLATEINERTIA
     elements:
       Shape:
         geometry: *LONGPLATE
         appearance: *PlateAppearance
+
+# MARK:接触点
   -
     name: BALL_+++
     parent: CENTER
-    translation: [0.3, 0.3, 0.8]
+    translation: [0.35, 0.35, 0.85]
     jointType: fixed
     centerOfMass: [0, 0, 0]
-    mass: 0.1
-    inertia: [
+    mass: &BALLMASS 0.125
+    inertia: &BALLINERTIA [
       0.01, 0,   0,
       0,   0.01, 0,
       0,   0,   0.01 ]
@@ -130,7 +118,7 @@ links:
       Shape:
         geometry: &BallGeometry
           type: Sphere
-          radius: 0.05
+          radius: 0.1
         appearance: &BallAppearance
           material:
             diffuseColor: [1, 0, 0]
@@ -138,14 +126,11 @@ links:
   -
     name: BALL_++-
     parent: CENTER
-    translation: [0.3, 0.3, -0.8]
+    translation: [0.35, 0.35, -0.85]
     jointType: fixed
     centerOfMass: [0, 0, 0]
-    mass: 0.1
-    inertia: [
-      0.01, 0,   0,
-      0,   0.01, 0,
-      0,   0,   0.01 ]
+    mass: *BALLMASS
+    inertia: *BALLINERTIA
     elements:
       Shape:
         geometry: *BallGeometry
@@ -153,14 +138,11 @@ links:
   -
     name: BALL_+-+
     parent: CENTER
-    translation: [0.3, -0.3, 0.8]
+    translation: [0.35, -0.35, 0.85]
     jointType: fixed
     centerOfMass: [0, 0, 0]
-    mass: 0.1
-    inertia: [
-      0.01, 0,   0,
-      0,   0.01, 0,
-      0,   0,   0.01 ]
+    mass: *BALLMASS
+    inertia: *BALLINERTIA
     elements:
       Shape:
         geometry: *BallGeometry
@@ -168,14 +150,11 @@ links:
   -
     name: BALL_-++
     parent: CENTER
-    translation: [-0.3, 0.3, 0.8]
+    translation: [-0.35, 0.35, 0.85]
     jointType: fixed
     centerOfMass: [0, 0, 0]
-    mass: 0.1
-    inertia: [
-      0.01, 0,   0,
-      0,   0.01, 0,
-      0,   0,   0.01 ]
+    mass: *BALLMASS
+    inertia: *BALLINERTIA
     elements:
       Shape:
         geometry: *BallGeometry
@@ -183,14 +162,11 @@ links:
   -
     name: BALL_--+
     parent: CENTER
-    translation: [-0.3, -0.3, 0.8]
+    translation: [-0.35, -0.35, 0.85]
     jointType: fixed
     centerOfMass: [0, 0, 0]
-    mass: 0.1
-    inertia: [
-      0.01, 0,   0,
-      0,   0.01, 0,
-      0,   0,   0.01 ]
+    mass: *BALLMASS
+    inertia: *BALLINERTIA
     elements:
       Shape:
         geometry: *BallGeometry
@@ -198,14 +174,11 @@ links:
   -
     name: BALL_+--
     parent: CENTER
-    translation: [0.3, -0.3, -0.8]
+    translation: [0.35, -0.35, -0.85]
     jointType: fixed
     centerOfMass: [0, 0, 0]
-    mass: 0.1
-    inertia: [
-      0.01, 0,   0,
-      0,   0.01, 0,
-      0,   0,   0.01 ]
+    mass: *BALLMASS
+    inertia: *BALLINERTIA
     elements:
       Shape:
         geometry: *BallGeometry
@@ -213,14 +186,11 @@ links:
   -
     name: BALL_---
     parent: CENTER
-    translation: [-0.3, -0.3, -0.8]
+    translation: [-0.35, -0.35, -0.85]
     jointType: fixed
     centerOfMass: [0, 0, 0]
-    mass: 0.1
-    inertia: [
-      0.01, 0,   0,
-      0,   0.01, 0,
-      0,   0,   0.01 ]
+    mass: *BALLMASS
+    inertia: *BALLINERTIA
     elements:
       Shape:
         geometry: *BallGeometry
@@ -228,15 +198,280 @@ links:
   -
     name: BALL_-+-
     parent: CENTER
-    translation: [-0.3, 0.3, -0.8]
+    translation: [-0.35, 0.35, -0.85]
     jointType: fixed
     centerOfMass: [0, 0, 0]
-    mass: 0.1
-    inertia: [
-      0.01, 0,   0,
-      0,   0.01, 0,
-      0,   0,   0.01 ]
+    mass: *BALLMASS
+    inertia: *BALLINERTIA
     elements:
       Shape:
         geometry: *BallGeometry
         appearance: *BallAppearance
+
+# MARK:リアクションホイール
+  - 
+    name: REACTION_BASE_FRONT
+    parent: CENTER
+    translation: [0.07, 0, 0]
+    jointType: prismatic
+    jointAxis: Z
+    jointId: 0
+    jointRange: &SLIDERANGE [-0.6, 0.6]
+    centerOfMass: [0, 0, 0]
+    mass: &REACTION_BASE_MASS 0.5
+    inertia: &REACTION_BASE_INERTIA [
+      0.1, 0,   0,
+      0,   0.1, 0,
+      0,   0,   0.1 ]
+    elements:
+      Shape: &REACTION_BASE_SHAPE
+        geometry:
+          type: Box
+          size: [0.01, 0.1, 0.1]
+        appearance:
+          material:
+            diffuseColor: [0.7, 0.7, 0.2]
+            transparency: 0.5
+            shininess: 0.5
+  - 
+    name: ROLL_WHEEL_FRONT_1
+    parent: REACTION_BASE_FRONT
+    translation: &WHEEL_TRANS1 [0.055, 0, 0]
+    rotation: &WHEEL_ROT [0, 0, 1, 90]
+    jointType: revolute
+    jointId: 1
+    jointAxis: Y
+    centerOfMass: [0, 0, 0]
+    mass: &WHEELMASS 2
+    inertia: &WHEELINERTIA [
+      1, 0,   0,
+      0,   1, 0,
+      0,   0,   1 ]
+    elements:
+      Shape: &WHEELSHAPE
+        geometry: 
+          type: Cylinder
+          height: 0.05
+          radius: 0.08
+        appearance:
+          material:
+            diffuseColor: [0.2, 0.8, 0.2]
+            transparency: 0.5
+            shininess: 0.5
+  - 
+    name: ROLL_WHEEL_FRONT_2
+    parent: REACTION_BASE_FRONT
+    translation: &WHEEL_TRANS2 [0.13, 0, 0]
+    rotation: *WHEEL_ROT
+    jointType: revolute
+    jointId: 2
+    jointAxis: Y
+    centerOfMass: [0, 0, 0]
+    mass: *WHEELMASS
+    inertia: *WHEELINERTIA
+    elements:
+      Shape: *WHEELSHAPE
+
+  - 
+    name: REACTION_BASE_BACK
+    parent: CENTER
+    translation: [-0.07, 0, 0]
+    rotation: [0, 0, 1, 180]
+    jointType: prismatic
+    jointAxis: Z
+    jointId: 3
+    jointRange: *SLIDERANGE
+    centerOfMass: [0, 0, 0]
+    mass: *REACTION_BASE_MASS
+    inertia: *REACTION_BASE_INERTIA
+    elements:
+      Shape: *REACTION_BASE_SHAPE
+  -
+    name: ROLL_WHEEL_BACK_1
+    parent: REACTION_BASE_BACK
+    translation: *WHEEL_TRANS1
+    rotation: *WHEEL_ROT
+    jointType: revolute
+    jointId: 4
+    jointAxis: Y
+    centerOfMass: [0, 0, 0]
+    mass: *WHEELMASS
+    inertia: *WHEELINERTIA
+    elements:
+      Shape: *WHEELSHAPE
+  -
+    name: ROLL_WHEEL_BACK_2
+    parent: REACTION_BASE_BACK
+    translation: *WHEEL_TRANS2
+    rotation: *WHEEL_ROT
+    jointType: revolute
+    jointId: 5
+    jointAxis: Y
+    centerOfMass: [0, 0, 0]
+    mass: *WHEELMASS
+    inertia: *WHEELINERTIA
+    elements:
+      Shape: *WHEELSHAPE
+  
+  - name: REACTION_BASE_LEFT
+    parent: CENTER
+    translation: [0, 0.07, 0]
+    rotation: [0, 0, 1, 90]
+    jointType: prismatic
+    jointAxis: Z
+    jointId: 6
+    jointRange: *SLIDERANGE
+    centerOfMass: [0, 0, 0]
+    mass: *REACTION_BASE_MASS
+    inertia: *REACTION_BASE_INERTIA
+    elements:
+      Shape: *REACTION_BASE_SHAPE
+  -
+    name: ROLL_WHEEL_LEFT_1
+    parent: REACTION_BASE_LEFT
+    translation: *WHEEL_TRANS1
+    rotation: *WHEEL_ROT
+    jointType: revolute
+    jointId: 7
+    jointAxis: Y
+    centerOfMass: [0, 0, 0]
+    mass: *WHEELMASS
+    inertia: *WHEELINERTIA
+    elements:
+      Shape: *WHEELSHAPE
+  -
+    name: ROLL_WHEEL_LEFT_2
+    parent: REACTION_BASE_LEFT
+    translation: *WHEEL_TRANS2
+    rotation: *WHEEL_ROT
+    jointType: revolute
+    jointId: 8
+    jointAxis: Y
+    centerOfMass: [0, 0, 0]
+    mass: *WHEELMASS
+    inertia: *WHEELINERTIA
+    elements:
+      Shape: *WHEELSHAPE
+  
+  - name: REACTION_BASE_RIGHT
+    parent: CENTER
+    translation: [0, -0.07, 0]
+    rotation: [0, 0, 1, -90]
+    jointType: prismatic
+    jointAxis: Z
+    jointId: 9
+    jointRange: *SLIDERANGE
+    centerOfMass: [0, 0, 0]
+    mass: *REACTION_BASE_MASS
+    inertia: *REACTION_BASE_INERTIA
+    elements:
+      Shape: *REACTION_BASE_SHAPE
+  -
+    name: ROLL_WHEEL_RIGHT_1
+    parent: REACTION_BASE_RIGHT
+    translation: *WHEEL_TRANS1
+    rotation: *WHEEL_ROT
+    jointType: revolute
+    jointId: 10
+    jointAxis: Y
+    centerOfMass: [0, 0, 0]
+    mass: *WHEELMASS
+    inertia: *WHEELINERTIA
+    elements:
+      Shape: *WHEELSHAPE
+  -
+    name: ROLL_WHEEL_RIGHT_2
+    parent: REACTION_BASE_RIGHT
+    translation: *WHEEL_TRANS2
+    rotation: *WHEEL_ROT
+    jointType: revolute
+    jointId: 11
+    jointAxis: Y
+    centerOfMass: [0, 0, 0]
+    mass: *WHEELMASS
+    inertia: *WHEELINERTIA
+    elements:
+      Shape: *WHEELSHAPE
+  
+  - 
+    name: REACTION_BASE_UP
+    parent: CENTER
+    translation: [0, 0, 0.07]
+    rotation: [0, 1, 0, -90]
+    jointType: prismatic
+    jointAxis: X
+    jointId: 12
+    jointRange: *SLIDERANGE
+    centerOfMass: [0, 0, 0]
+    mass: *REACTION_BASE_MASS
+    inertia: *REACTION_BASE_INERTIA
+    elements:
+      Shape: *REACTION_BASE_SHAPE
+  -
+    name: ROLL_WHEEL_UP_1
+    parent: REACTION_BASE_UP
+    translation: *WHEEL_TRANS1
+    rotation: *WHEEL_ROT
+    jointType: revolute
+    jointId: 13
+    jointAxis: Y
+    centerOfMass: [0, 0, 0]
+    mass: *WHEELMASS
+    inertia: *WHEELINERTIA
+    elements:
+      Shape: *WHEELSHAPE
+  -
+    name: ROLL_WHEEL_UP_2
+    parent: REACTION_BASE_UP
+    translation: *WHEEL_TRANS2
+    rotation: *WHEEL_ROT
+    jointType: revolute
+    jointId: 14
+    jointAxis: Y
+    centerOfMass: [0, 0, 0]
+    mass: *WHEELMASS
+    inertia: *WHEELINERTIA
+    elements:
+      Shape: *WHEELSHAPE
+
+  -
+    name: REACTION_BASE_DOWN
+    parent: CENTER
+    translation: [0, 0, -0.07]
+    rotation: [0, 1, 0, 90]
+    jointType: prismatic
+    jointAxis: X
+    jointId: 15
+    jointRange: *SLIDERANGE
+    centerOfMass: [0, 0, 0]
+    mass: *REACTION_BASE_MASS
+    inertia: *REACTION_BASE_INERTIA
+    elements:
+      Shape: *REACTION_BASE_SHAPE
+  -
+    name: ROLL_WHEEL_DOWN_1
+    parent: REACTION_BASE_DOWN
+    translation: *WHEEL_TRANS1
+    rotation: *WHEEL_ROT
+    jointType: revolute
+    jointId: 16
+    jointAxis: Y
+    centerOfMass: [0, 0, 0]
+    mass: *WHEELMASS
+    inertia: *WHEELINERTIA
+    elements:
+      Shape: *WHEELSHAPE
+  -
+    name: ROLL_WHEEL_DOWN_2
+    parent: REACTION_BASE_DOWN
+    translation: *WHEEL_TRANS2
+    rotation: *WHEEL_ROT
+    jointType: revolute
+    jointId: 17
+    jointAxis: Y
+    centerOfMass: [0, 0, 0]
+    mass: *WHEELMASS
+    inertia: *WHEELINERTIA
+    elements:
+      Shape: *WHEELSHAPE
+

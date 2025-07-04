@@ -1,0 +1,242 @@
+format: ChoreonoidBody
+formatVersion: 1.0
+angleUnit: degree
+name: SimpleTank
+
+links:
+  - 
+    name: CENTER
+    translation: [0, 0, 1]
+    jointType: free
+    centerOfMass: [0, 0, 0]
+    mass: 1.0
+    inertia: [
+      0.1, 0,   0,
+      0,   0.1, 0,
+      0,   0,   0.1 ]
+    
+  - 
+    name: BOTTOM
+    parent: CENTER
+    translation: [0, 0, -0.8]
+    jointType: fixed
+    centerOfMass: [0, 0, 0]
+    mass: 1.0
+    inertia: [
+      0.1, 0,   0,
+      0,   0.1, 0,
+      0,   0,   0.1 ]
+    elements:
+      Shape:
+        geometry: &SHORTPLATE
+          type: Box
+          size: [0.6, 0.6, 0.05]
+        appearance: &PlateAppearance
+          material:
+            diffuseColor: [0, 0.6, 0.6]
+            transparency: 0.8
+            shininess: 0.6
+  - 
+    name: TOP
+    parent: CENTER
+    translation: [0, 0, 0.8]
+    jointType: fixed
+    centerOfMass: [0, 0, 0]
+    mass: 1.0
+    inertia: [
+      0.1, 0,   0,
+      0,   0.1, 0,
+      0,   0,   0.1 ]
+    elements:
+      Shape:
+        geometry: *SHORTPLATE
+        appearance: *PlateAppearance
+  - 
+    name: FRONT
+    parent: CENTER
+    translation: [0.3 , 0, 0]
+    jointType: fixed
+    centerOfMass: [0, 0, 0]
+    mass: 1.0
+    inertia: [
+      0.1, 0,   0,
+      0,   0.1, 0,
+      0,   0,   0.1 ]
+    elements:
+      Shape:
+        geometry: &LONGPLATE
+          type: Box
+          size: [0.05, 0.6, 1.6]
+        appearance: *PlateAppearance
+  - 
+    name: BACK
+    parent: CENTER
+    translation: [-0.3 , 0, 0]
+    jointType: fixed
+    centerOfMass: [0, 0, 0]
+    mass: 1.0
+    inertia: [
+      0.1, 0,   0,
+      0,   0.1, 0,
+      0,   0,   0.1 ]
+    elements:
+      Shape:
+        geometry: *LONGPLATE
+        appearance: *PlateAppearance
+  - 
+    name: LEFT
+    parent: CENTER
+    translation: [0 , 0.3, 0]
+    rotation: [0,0,1, 90]
+    jointType: fixed
+    centerOfMass: [0, 0, 0]
+    mass: 1.0
+    inertia: [
+      0.1, 0,   0,
+      0,   0.1, 0,
+      0,   0,   0.1 ]
+    elements:
+      Shape:
+        geometry: *LONGPLATE
+        appearance: *PlateAppearance
+  - 
+    name: RIGHT
+    parent: CENTER
+    translation: [0 , -0.3, 0]
+    rotation: [0,0,1, 90]
+    jointType: fixed
+    centerOfMass: [0, 0, 0]
+    mass: 1.0
+    inertia: [
+      0.1, 0,   0,
+      0,   0.1, 0,
+      0,   0,   0.1 ]
+    elements:
+      Shape:
+        geometry: *LONGPLATE
+        appearance: *PlateAppearance
+  -
+    name: BALL_+++
+    parent: CENTER
+    translation: [0.3, 0.3, 0.8]
+    jointType: fixed
+    centerOfMass: [0, 0, 0]
+    mass: 0.1
+    inertia: [
+      0.01, 0,   0,
+      0,   0.01, 0,
+      0,   0,   0.01 ]
+    elements:
+      Shape:
+        geometry: &BallGeometry
+          type: Sphere
+          radius: 0.05
+        appearance: &BallAppearance
+          material:
+            diffuseColor: [1, 0, 0]
+            transparency: 0.7
+  -
+    name: BALL_++-
+    parent: CENTER
+    translation: [0.3, 0.3, -0.8]
+    jointType: fixed
+    centerOfMass: [0, 0, 0]
+    mass: 0.1
+    inertia: [
+      0.01, 0,   0,
+      0,   0.01, 0,
+      0,   0,   0.01 ]
+    elements:
+      Shape:
+        geometry: *BallGeometry
+        appearance: *BallAppearance
+  -
+    name: BALL_+-+
+    parent: CENTER
+    translation: [0.3, -0.3, 0.8]
+    jointType: fixed
+    centerOfMass: [0, 0, 0]
+    mass: 0.1
+    inertia: [
+      0.01, 0,   0,
+      0,   0.01, 0,
+      0,   0,   0.01 ]
+    elements:
+      Shape:
+        geometry: *BallGeometry
+        appearance: *BallAppearance
+  -
+    name: BALL_-++
+    parent: CENTER
+    translation: [-0.3, 0.3, 0.8]
+    jointType: fixed
+    centerOfMass: [0, 0, 0]
+    mass: 0.1
+    inertia: [
+      0.01, 0,   0,
+      0,   0.01, 0,
+      0,   0,   0.01 ]
+    elements:
+      Shape:
+        geometry: *BallGeometry
+        appearance: *BallAppearance
+  -
+    name: BALL_--+
+    parent: CENTER
+    translation: [-0.3, -0.3, 0.8]
+    jointType: fixed
+    centerOfMass: [0, 0, 0]
+    mass: 0.1
+    inertia: [
+      0.01, 0,   0,
+      0,   0.01, 0,
+      0,   0,   0.01 ]
+    elements:
+      Shape:
+        geometry: *BallGeometry
+        appearance: *BallAppearance
+  -
+    name: BALL_+--
+    parent: CENTER
+    translation: [0.3, -0.3, -0.8]
+    jointType: fixed
+    centerOfMass: [0, 0, 0]
+    mass: 0.1
+    inertia: [
+      0.01, 0,   0,
+      0,   0.01, 0,
+      0,   0,   0.01 ]
+    elements:
+      Shape:
+        geometry: *BallGeometry
+        appearance: *BallAppearance
+  -
+    name: BALL_---
+    parent: CENTER
+    translation: [-0.3, -0.3, -0.8]
+    jointType: fixed
+    centerOfMass: [0, 0, 0]
+    mass: 0.1
+    inertia: [
+      0.01, 0,   0,
+      0,   0.01, 0,
+      0,   0,   0.01 ]
+    elements:
+      Shape:
+        geometry: *BallGeometry
+        appearance: *BallAppearance
+  -
+    name: BALL_-+-
+    parent: CENTER
+    translation: [-0.3, 0.3, -0.8]
+    jointType: fixed
+    centerOfMass: [0, 0, 0]
+    mass: 0.1
+    inertia: [
+      0.01, 0,   0,
+      0,   0.01, 0,
+      0,   0,   0.01 ]
+    elements:
+      Shape:
+        geometry: *BallGeometry
+        appearance: *BallAppearance

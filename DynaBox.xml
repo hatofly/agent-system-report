@@ -1,0 +1,155 @@
+<mujoco model="DynaBox">
+
+  <compiler angle="degree" />
+  <option gravity="0 0 -9.8" />
+  <asset>
+    <texture name="texplane" type="2d" builtin="checker" rgb1=".25 .25 .25" rgb2=".3 .3 .3"
+      width="512" height="512" mark="cross" markrgb=".8 .8 .8" />
+    <material name="matplane" reflectance="0.3" texture="texplane" texrepeat="1 1" texuniform="true" />
+  </asset>
+  <default>
+    <!--
+    <default class="PLATE">
+      <inertial mass="1.0" pos="0 0 0" diaginertia="0.1 0.1 0.1"/>
+    </default>
+    -->
+    <default class="SHORTPLATE">
+      <geom type="box" size="0.3 0.3 0.025" rgba="0 0.6 0.6 0.1" />
+    </default>
+    <default class="LONGPLATE">
+      <geom type="box" size="0.025 0.3 0.8" rgba="0 0.6 0.6 0.1" />
+    </default>
+    <default class="BALL">
+      <geom type="sphere" size="0.1" rgba="1 0 0 0.7" />
+    </default>
+    <default class="REACTION_WHEEL">
+      <geom type="box" size="0.06 0.06 0.05" rgba="0.2 0.8 0.2 0.5" />
+      <joint type="hinge" axis="0 0 1" pos="0 0 0" limited="false" />
+    </default>
+    <velocity ctrlrange="-1000 1000" ctrllimited="true" forcelimited="false" />
+    <motor ctrllimited="false" />
+  </default>
+  <worldbody>
+    <body name="FLOOR">
+      <geom name="floor" pos="0 0 0" size="0 0 1" type="plane" material="matplane"/>
+    </body>
+    <light directional="true" diffuse=".8 .8 .8" specular=".2 .2 .2" pos="0 0 5" dir="0 0 -1"/>
+    <body name="CENTER" pos="0 0 1">
+      <joint type="free" />
+      <inertial mass="0.1" pos="0 0 0" diaginertia="0.00017 0.00017 0.00017" />
+      <!-- MARK:SHELL PLATES -->
+      <body name="BOTTOM_PLATE" pos="0 0 -0.8">
+        <inertial mass="0.1" pos="0 0 0" diaginertia="0.003 0.003 0.006" />
+        <geom class="SHORTPLATE" />
+      </body>
+      <body name="TOP_PLATE" pos="0 0 0.8">
+        <inertial mass="0.1" pos="0 0 0" diaginertia="0.003 0.003 0.006" />
+        <geom class="SHORTPLATE" />
+      </body>
+      <body name="FRONT_PLATE" pos="0.3 0 0">
+        <inertial mass="0.1" pos="0 0 0" diaginertia="0.024 0.021 0.003" />
+        <geom class="LONGPLATE" />
+      </body>
+      <body name="BACK_PLATE" pos="-0.3 0 0">
+        <inertial mass="0.1" pos="0 0 0" diaginertia="0.024 0.021 0.003" />
+        <geom class="LONGPLATE" />
+      </body>
+      <body name="LEFT_PLATE" pos="0 0.3 0" axisangle="0 0 1 90">
+        <inertial mass="0.1" pos="0 0 0" diaginertia="0.024 0.021 0.003" />
+        <geom class="LONGPLATE" />
+      </body>
+      <body name="RIGHT_PLATE" pos="0 -0.3 0" axisangle="0 0 1 90">
+        <inertial mass="0.1" pos="0 0 0" diaginertia="0.024 0.021 0.003" />
+        <geom class="LONGPLATE" />
+      </body>
+      <!-- MARK: CONTACT BALLS -->
+      <body name="BALL_+++" pos="0.35 0.35 0.85">
+        <inertial mass="0.0125" pos="0 0 0" diaginertia="0.00005 0.00005 0.00005" />
+        <geom class="BALL" />
+      </body>
+      <body name="BALL_++-" pos="0.35 0.35 -0.85">
+        <inertial mass="0.0125" pos="0 0 0" diaginertia="0.00005 0.00005 0.00005" />
+        <geom class="BALL" />
+      </body>
+      <body name="BALL_+-+" pos="0.35 -0.35 0.85">
+        <inertial mass="0.0125" pos="0 0 0" diaginertia="0.00005 0.00005 0.00005" />
+        <geom class="BALL" />
+      </body>
+      <body name="BALL_-++" pos="-0.35 0.35 0.85">
+        <inertial mass="0.0125" pos="0 0 0" diaginertia="0.00005 0.00005 0.00005" />
+        <geom class="BALL" />
+      </body>
+      <body name="BALL_+--" pos="0.35 -0.35 -0.85">
+        <inertial mass="0.0125" pos="0 0 0" diaginertia="0.00005 0.00005 0.00005" />
+        <geom class="BALL" />
+      </body>
+      <body name="BALL_-+-" pos="-0.35 0.35 -0.85">
+        <inertial mass="0.0125" pos="0 0 0" diaginertia="0.00005 0.00005 0.00005" />
+        <geom class="BALL" />
+      </body>
+      <body name="BALL_--+" pos="-0.35 -0.35 0.85">
+        <inertial mass="0.0125" pos="0 0 0" diaginertia="0.00005 0.00005 0.00005" />
+        <geom class="BALL" />
+      </body>
+      <body name="BALL_---" pos="-0.35 -0.35 -0.85">
+        <inertial mass="0.0125" pos="0 0 0" diaginertia="0.00005 0.00005 0.00005" />
+        <geom class="BALL" />
+      </body>
+      <!-- MARK:REACTION WHEEL -->
+      <body name="REACTION_UNIT_BASE">
+        <joint name="REACTION_UNIT_PRISMATIC" type="slide" axis="0 0 1" limited="true"
+          range="-0.4 0.4" />
+        <inertial mass="2" pos="0 0 0" diaginertia="0.0074 0.0074 0.011" />
+        <geom type="box" size="0.05 0.05 0.05" rgba="0.8 0.8 0.2 0.5" />
+        <!-- wheel base4つの質量と慣性モーメントを統合するとこうなる-->
+        <body name="REACTION_WHEEL_FRONT" pos="0.1625 0 0" axisangle="0 1 0 90">
+          <!-- wheelは各方向で統合する -->
+          <inertial mass="3" pos="0 0 0" diaginertia="1.92 3.84 1.92" />
+          <geom class="REACTION_WHEEL" />
+          <joint name="REACTION_WHEEL_FRONT_JOINT" class="REACTION_WHEEL" />
+        </body>
+
+        <body name="REACTION_WHEEL_BACK" pos="-0.1625 0 0" axisangle="0 1 0 90">
+          <inertial mass="3" pos="0 0 0" diaginertia="1.92 3.84 1.92" />
+          <geom class="REACTION_WHEEL" />
+          <joint name="REACTION_WHEEL_BACK_JOINT" class="REACTION_WHEEL" /><!-- .bodyファイルに合わせて、反転する -->
+        </body>
+        <body name="REACTION_WHEEL_LEFT" pos="0 0.1625 0" axisangle="1 0 0 90">
+          <inertial mass="3" pos="0 0 0" diaginertia="1.92 3.84 1.92" />
+          <geom class="REACTION_WHEEL" />
+          <joint name="REACTION_WHEEL_LEFT_JOINT" class="REACTION_WHEEL" />
+        </body>
+        <body name="REACTION_WHEEL_RIGHT" pos="0 -0.1625 0" axisangle="1 0 0 90">
+          <inertial mass="3" pos="0 0 0" diaginertia="1.92 3.84 1.92" />
+          <geom class="REACTION_WHEEL" />
+          <joint name="REACTION_WHEEL_RIGHT_JOINT" class="REACTION_WHEEL" />
+        </body>
+        <body name="REACTION_WHEEL_TOP" pos="0 0 0.1625">
+          <inertial mass="3" pos="0 0 0" diaginertia="1.92 3.84 1.92" />
+          <geom class="REACTION_WHEEL" />
+          <joint name="REACTION_WHEEL_TOP_JOINT" class="REACTION_WHEEL" />
+        </body>
+        <body name="REACTION_WHEEL_BOTTOM" pos="0 0 -0.1625">
+          <inertial mass="3" pos="0 0 0" diaginertia="1.92 3.84 1.92" />
+          <geom class="REACTION_WHEEL" />
+          <joint name="REACTION_WHEEL_BOTTOM_JOINT" class="REACTION_WHEEL" />
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <actuator>
+    <!-- <position joint="REACTION_UNIT_PRISMATIC" kp="10000" kv="100" ctrlrange="-0.5 0.5"/> -->
+    <!-- <velocity name="j0" joint="REACTION_UNIT_PRISMATIC" kv="1000" ctrlrange="-10 10"
+    ctrllimited="true" forcelimited="false"/> -->
+    <motor name="j0" joint="REACTION_UNIT_PRISMATIC" />
+    <motor name="j1" joint="REACTION_WHEEL_FRONT_JOINT" />
+    <motor name="j2" joint="REACTION_WHEEL_BACK_JOINT" />
+    <motor name="j3" joint="REACTION_WHEEL_LEFT_JOINT" />
+    <motor name="j4" joint="REACTION_WHEEL_RIGHT_JOINT" />
+    <motor name="j5" joint="REACTION_WHEEL_TOP_JOINT" />
+    <motor name="j6" joint="REACTION_WHEEL_BOTTOM_JOINT" />
+
+  </actuator>
+
+</mujoco>

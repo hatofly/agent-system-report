@@ -78,13 +78,13 @@ items:
             oldAccelSensorMode: false
         -
           id: 4
-          name: "ReactionBox"
+          name: "DynaBox"
           plugin: Body
           class: BodyItem
           is_selected: true
           is_checked: true
           data:
-            file: "reactionbox.body"
+            file: "DynaBox.body"
             format: CHOREONOID-BODY
             rootPosition: [ 4.2942526e-05, 0.000117979974, 0.949770371 ]
             rootAttitude: [

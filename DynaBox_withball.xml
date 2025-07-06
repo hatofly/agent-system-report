@@ -14,13 +14,13 @@
     </default>
     -->
     <default class="SHORTPLATE">
-      <geom type="box" size="0.45 0.45 0.025" rgba="0 0.6 0.6 1" />
+      <geom type="box" size="0.3 0.3 0.025" rgba="0 0.6 0.6 0.1" />
     </default>
     <default class="LONGPLATE">
-      <geom type="box" size="0.025 0.45 0.95" rgba="0 0.6 0.6 1" />
+      <geom type="box" size="0.025 0.3 0.8" rgba="0 0.6 0.6 0.1" />
     </default>
     <default class="BALL">
-      <geom type="sphere" size="0.01" rgba="1 0 0 0.7" />
+      <geom type="sphere" size="0.1" rgba="1 0 0 0.7" />
     </default>
     <default class="REACTION_WHEEL">
       <geom type="box" size="0.06 0.06 0.05" rgba="0.2 0.8 0.2 0.5" />
@@ -38,27 +38,27 @@
       <joint type="free" />
       <inertial mass="0.1" pos="0 0 0" diaginertia="0.00017 0.00017 0.00017" />
       <!-- MARK:SHELL PLATES -->
-      <body name="BOTTOM_PLATE" pos="0 0 -0.95">
+      <body name="BOTTOM_PLATE" pos="0 0 -0.8">
         <inertial mass="0.1" pos="0 0 0" diaginertia="0.003 0.003 0.006" />
         <geom class="SHORTPLATE" />
       </body>
-      <body name="TOP_PLATE" pos="0 0 0.95">
+      <body name="TOP_PLATE" pos="0 0 0.8">
         <inertial mass="0.1" pos="0 0 0" diaginertia="0.003 0.003 0.006" />
         <geom class="SHORTPLATE" />
       </body>
-      <body name="FRONT_PLATE" pos="0.45 0 0">
+      <body name="FRONT_PLATE" pos="0.3 0 0">
         <inertial mass="0.1" pos="0 0 0" diaginertia="0.024 0.021 0.003" />
         <geom class="LONGPLATE" />
       </body>
-      <body name="BACK_PLATE" pos="-0.45 0 0">
+      <body name="BACK_PLATE" pos="-0.3 0 0">
         <inertial mass="0.1" pos="0 0 0" diaginertia="0.024 0.021 0.003" />
         <geom class="LONGPLATE" />
       </body>
-      <body name="LEFT_PLATE" pos="0 0.45 0" axisangle="0 0 1 90">
+      <body name="LEFT_PLATE" pos="0 0.3 0" axisangle="0 0 1 90">
         <inertial mass="0.1" pos="0 0 0" diaginertia="0.024 0.021 0.003" />
         <geom class="LONGPLATE" />
       </body>
-      <body name="RIGHT_PLATE" pos="0 -0.45 0" axisangle="0 0 1 90">
+      <body name="RIGHT_PLATE" pos="0 -0.3 0" axisangle="0 0 1 90">
         <inertial mass="0.1" pos="0 0 0" diaginertia="0.024 0.021 0.003" />
         <geom class="LONGPLATE" />
       </body>

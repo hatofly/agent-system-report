@@ -5,10 +5,19 @@ import time
 import threading
 import numpy as np
 from scipy.spatial.transform import Rotation as R
+import rospy
+from geometry_msgs.msg import PoseStamped, Quaternion, Point,Twist
 
 Lock = threading.Lock()
 class SimMain():
     def __init__(self):
+
+        # Initialize ROS node
+        # rospy.init_node('mujocosim_node', anonymous=True)
+        # rospy.Subscriber('cmd_vel', Twist, self.cmd_vel_callback)
+        self.cmd_vel = Twist()
+        self.RW_Inertia = 3.84 # MARK:⚠️これはxmlと一致させる必要あり
+
         self.actuators = ["j0", "j1", "j2", "j3", "j4", "j5", "j6"]
         self.GAINS={
             'Kp': 500.0,  # Proportional gain
@@ -28,6 +37,7 @@ class SimMain():
         self.actual_forces = {}
         self.rupos = [0,0,1]
         self.ruquat = [0,0,0,1]  # Quaternion representing no rotation
+        self.ruquat_prev = [0,0,0,1]  # Previous quaternion for comparison
         self.centerpos = [0,0,0]
         self.centerquat = [0,0,0,1]  # Quaternion representing no rotation
         maxforce = 10**3
@@ -55,6 +65,8 @@ class SimMain():
         self.control_loop_orientation_thread.join()
         self.control_loop_jump_thread.join()
         pass
+    def cmd_vel_callback(self, msg):
+        self.cmd_vel = msg
 
     def apply_force_under_limit(self,joint):
         #with Lock:
@@ -74,15 +86,17 @@ class SimMain():
     def control_loop_orientation(self):
         start_time = time.time()
         ctrl_period = 0.01  # Control loop period in seconds
-        self.target_pitch = np.deg2rad(35) 
-        prev_pitch_error = 0
-        integral_pitch_error = 0
+        self.target_angles = np.array([np.deg2rad(0), np.deg2rad(35)])  # Target angles for pitch and roll in radians
+        prev_angles_error = np.zeros(2)  # Previous error for angles
+        integral_angles_error = np.zeros(2)  # Integral error for angles
         velgain = 20
 
         while True:
             simtime = time.time() - start_time
             if self.isfallen and abs(self.velocities["j3"] + self.velocities["j4"])/2 > 20:
                 # MARK: 倒れた状態では一旦速度を0にするP制御を書け続ける
+                self.commands["j1"] = - self.velocities["j1"] * velgain
+                self.commands["j2"] = - self.velocities["j2"] * velgain
                 self.commands["j3"] = - self.velocities["j3"] * velgain
                 self.commands["j4"] = - self.velocities["j4"] * velgain
 
@@ -91,36 +105,48 @@ class SimMain():
                 # MARK: Orientation control
                 # with Lock:
                 ruquat = self.ruquat
-                euler_angles = R.from_quat(ruquat).as_euler('xyz', degrees=False)
-                pitch = euler_angles[1]  # Pitch angle in radians
-                pitch_error = self.target_pitch - pitch
-                if pitch_error < -np.pi*0.2: # 直立は倒れている判定ではないので、absはつけない
+                rotation = R.from_quat(ruquat)
+                angles = np.array(rotation.as_euler('xyz', degrees=False)[:2])  # Get pitch and roll angles in radians
+                angles_error = self.target_angles - angles
+                print(f"angles_error: {angles_error}")
+                fall_threshold = np.deg2rad(36)  # 角度の閾値
+                if angles_error[0] < -fall_threshold or angles_error[1] < -fall_threshold: # 直立は倒れている判定ではないので、absはつけない
                     # 倒れているとみなす
                     self.largeangleerror = True
-                integral_pitch_error += pitch_error * ctrl_period
-                derivative_pitch_error = (pitch_error - prev_pitch_error) / ctrl_period
-                prev_pitch_error = pitch_error
+                integral_angles_error += angles_error * ctrl_period
+                derivative_angles_error = (angles_error - prev_angles_error) / ctrl_period
+                prev_angles_error = angles_error
 
-                # PID control for pitch
-                pitch_control = (self.GAINS['Kp'] * pitch_error +
-                            self.GAINS['Ki'] * integral_pitch_error +
-                            self.GAINS['Kd'] * derivative_pitch_error)
+                # PID control for angles
+                angles_control = (self.GAINS['Kp'] * angles_error +
+                            self.GAINS['Ki'] * integral_angles_error +
+                            self.GAINS['Kd'] * derivative_angles_error)
 
                 # Adjustments: リアクション・ホイール自体がピッチに対してどっち側に回るか
-                pitch_control_adjusted =   pitch_control
+                angles_control_adjusted = angles_control
                 if simtime % 1 < ctrl_period:
-                    # print(f"Pitch: {np.rad2deg(pitch):.2f}°, Control: {(pitch_control_adjusted):.2f}")
-                    # print(f"Actuaal Torque: j3:{self.actual_forces['j3']:.2f}, j4:{self.actual_forces['j4']:.2f}")
-                    # print(f"Powers: j3:{self.actual_forces['j3'] * self.velocities['j3']:.2f}, j4:{self.actual_forces['j4'] * self.velocities['j4']:.2f}")
+                    # Debugging output
                     pass
-                # Consider Gyro Effect
-                # よく分からないという結論になったよ.
                 # Apply the control to the actuators 
                 # with Lock:
-                self.commands["j3"] = pitch_control_adjusted
-                self.commands["j4"] = pitch_control_adjusted
+                self.commands["j1"] = angles_control_adjusted[0]
+                self.commands["j2"] = angles_control_adjusted[0]
+                self.commands["j3"] = angles_control_adjusted[1]
+                self.commands["j4"] = angles_control_adjusted[1]
+
+                # MARK: Z-axis Gyro Compensation
+                angles_derivative = R.from_matrix(R.from_quat(self.ruquat_prev).as_matrix() @ rotation.as_matrix()).as_euler('xyz', degrees=False)[:2]/ctrl_period  # Get the derivative of angles in radians
+
+                gyrotorque = 0
+                gyrotorque_x = - self.RW_Inertia * (self.velocities["j1"] + self.velocities["j2"]) * angles_derivative[1]
+                gyrotorque_y =  self.RW_Inertia * (self.velocities["j3"] + self.velocities["j4"]) * angles_derivative[0]
+                gyrotorque = gyrotorque_x + gyrotorque_y
+                gyrocomp = -gyrotorque 
+                self.commands["j5"] = gyrocomp
+                self.commands["j6"] = gyrocomp
                 # print("TEST POINT")
             self.isfallen_prev = self.isfallen
+            self.ruquat_prev = self.ruquat.copy()  # Save the previous quaternion for comparison
             time.sleep(ctrl_period)  # Sleep to maintain control loop period
             pass
     

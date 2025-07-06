@@ -18,7 +18,7 @@ class SimMain():
         self.isfallen = False
         self.isfallen_prev = False
         self.largeangleerror = False
-        
+        self.onland = False
         self.commands = {}
         self.positions = {}
         self.velocities = {}
@@ -72,62 +72,39 @@ class SimMain():
             return np.clip(force, -self.powerlimits[joint]/vel, self.powerlimits[joint]/vel)
 
     def control_loop_orientation(self):
+        # zrotate
         start_time = time.time()
         ctrl_period = 0.01  # Control loop period in seconds
-        self.target_pitch = np.deg2rad(40) 
-        prev_pitch_error = 0
-        integral_pitch_error = 0
-        velgain = 20
+        integral_yaw_error = 0
+        Velgains = {
+            'Kp': 50.0,  # Proportional gain
+            'Ki': 1,  # Integral gain
+        }
 
         while True:
             simtime = time.time() - start_time
-            if self.isfallen and abs(self.velocities["j3"] + self.velocities["j4"])/2 > 20:
-                # MARK: 倒れた状態では一旦速度を0にするP制御を書け続ける
-                self.commands["j3"] = - self.velocities["j3"] * velgain
-                self.commands["j4"] = - self.velocities["j4"] * velgain
-
+            # MARK: Orientation control
+            # z軸を中心に回転させる
+            if self.onland:
+                # 着地しているときは速度を0にする速度制御をする
+                print("Setting Vel to 0")
+                vel = (self.velocities["j5"] + self.velocities["j6"]) / 2.0
+                torque = - (vel * Velgains['Kp'] + integral_yaw_error * Velgains['Ki'])  # PI制御
+                self.commands["j5"] = torque
+                self.commands["j6"] = torque
                 pass
             else:
-                # MARK: Orientation control
-                # with Lock:
-                ruquat = self.ruquat
-                euler_angles = R.from_quat(ruquat).as_euler('xyz', degrees=False)
-                pitch = euler_angles[1]  # Pitch angle in radians
-                pitch_error = self.target_pitch - pitch
-                if pitch_error < -np.pi*0.2: # 直立は倒れている判定ではないので、absはつけない
-                    # 倒れているとみなす
-                    self.largeangleerror = True
-                integral_pitch_error += pitch_error * ctrl_period
-                derivative_pitch_error = (pitch_error - prev_pitch_error) / ctrl_period
-                prev_pitch_error = pitch_error
-
-                # PID control for pitch
-                pitch_control = (self.GAINS['Kp'] * pitch_error +
-                            self.GAINS['Ki'] * integral_pitch_error +
-                            self.GAINS['Kd'] * derivative_pitch_error)
-
-                # Adjustments: リアクション・ホイール自体がピッチに対してどっち側に回るか
-                pitch_control_adjusted =   pitch_control
-                if simtime % 1 < ctrl_period:
-                    # print(f"Pitch: {np.rad2deg(pitch):.2f}°, Control: {(pitch_control_adjusted):.2f}")
-                    # print(f"Actuaal Torque: j3:{self.actual_forces['j3']:.2f}, j4:{self.actual_forces['j4']:.2f}")
-                    # print(f"Powers: j3:{self.actual_forces['j3'] * self.velocities['j3']:.2f}, j4:{self.actual_forces['j4'] * self.velocities['j4']:.2f}")
-                    pass
-                # Consider Gyro Effect
-                # よく分からないという結論になったよ.
-                # Apply the control to the actuators 
-                # with Lock:
-                self.commands["j3"] = pitch_control_adjusted
-                self.commands["j4"] = pitch_control_adjusted
-                # print("TEST POINT")
-            self.isfallen_prev = self.isfallen
+                integral_yaw_error = 0
+                torque = 10
+                print("Applying Constant Torque")
+                self.commands["j5"] = torque
+                self.commands["j6"] = torque
             time.sleep(ctrl_period)  # Sleep to maintain control loop period
             pass
-    
+
     def control_loop_jump(self):
         start_time = time.time()
         ctrl_period = 0.01  # Control loop period in seconds
-        onland = False
         land_height_threshold = 1.3
         fallen_height_threshold = 0.5
         landing_time_accumulation = 0.0
@@ -144,7 +121,7 @@ class SimMain():
             elif self.centerpos[2] < land_height_threshold:
                 # 着地状態とする
                 self.isfallen = False
-                onland = True
+                self.onland = True
                 landing_time_accumulation += ctrl_period
                 if landing_time_accumulation > 0.2:
                     # 着地後0.5秒立ってからジャンプ
@@ -153,8 +130,8 @@ class SimMain():
                     print(f"centerpos: {self.centerpos}")
             else:
                 self.isfallen = False
-                # thresh超えてたらジャンプ状態とする.
                 self.onland = False
+                # thresh超えてたらジャンプ状態とする.
                 self.commands["j0"] = -1.0  # Reset prismatic joint force
                 landing_time_accumulation = 0.0
                 if simtime % 1 < ctrl_period:

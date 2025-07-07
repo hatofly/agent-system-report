@@ -23,7 +23,7 @@ items:
           class: BodyItem
           is_checked: true
           data:
-            file: "../choreonoid/share/model/misc/floor.body"
+            file: "../../choreonoid/share/model/misc/floor.body"
             format: CHOREONOID-BODY
             rootPosition: [ 0, 0, -0.1 ]
             rootAttitude: [
@@ -46,6 +46,7 @@ items:
           name: "AISTSimulator"
           plugin: Body
           class: AISTSimulatorItem
+          is_selected: true
           is_checked: true
           data:
             time_step: 0.001
@@ -79,21 +80,20 @@ items:
           name: "DynaBox"
           plugin: Body
           class: BodyItem
-          is_selected: true
           is_checked: true
           data:
-            file: "DynaBox.body"
+            file: "../src/DynaBox.body"
             format: CHOREONOID-BODY
-            rootPosition: [ 4.2942526e-05, 0.000117979974, 0.949770371 ]
+            rootPosition: [ 0.0, 0.0, 1.0 ]
             rootAttitude: [
-              0.999999938, 0.000350677837, -2.93005663e-05,
-              -0.000350675365, 0.999999935, 8.43056932e-05,
-              2.93301285e-05, -8.4295413e-05, 0.999999996 ]
+              1, 0, 0,
+              0, 1, 0,
+              0, 0, 1 ]
             jointDisplacements: [
               0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
               0, 0, 0, 0, 0, 0, 0, 0 ]
             initialJointDisplacements: [
-              -136.844, 79.466, 79.466, 0, 0, 0, 0, 0, 0, 0,
+              0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
               0, 0, 0, 0, 0, 0, 0, 0 ]
             initialRootPosition: [ 0, 0, 1 ]
             initialRootAttitude: [
@@ -106,6 +106,20 @@ items:
             lock_location: false
             scene_sensitive: true
             zmp: [ 0, 0, 0 ]
+        -
+          id: 5
+          name: "DynaBoxController"
+          plugin: Body
+          class: SimpleControllerItem
+          is_selected: true
+          is_checked: true
+          data:
+            isNoDelayMode: false
+            controllerOptions: ""
+            controller: "../../../build/agent-system-report/lib/choreonoid-2.2/simplecontroller/DynaBoxController"
+            base_directory: "None"
+            reloading: false
+            export_symbols: false
 views:
   -
     id: 0
@@ -118,7 +132,7 @@ views:
     class: ItemTreeView
     mounted: true
     state:
-      expanded: [ 1 ]
+      expanded: [ 1, 4 ]
   -
     id: 2
     plugin: Base
@@ -150,9 +164,9 @@ views:
         -
           camera: [ System, Perspective ]
           isCurrent: true
-          eye: [ -1.18056, -1.7231, 4.61111 ]
-          direction: [ 0.151158, 0.342564, -0.927255 ]
-          up: [ 0.374332, 0.848338, 0.374432 ]
+          eye: [ -1.96371, -4.9864, 1.33303 ]
+          direction: [ 0.27729, 0.944512, -0.17609 ]
+          up: [ 0.0496032, 0.168959, 0.984374 ]
         -
           camera: [ System, Orthographic ]
           orthoHeight: 20
@@ -237,7 +251,7 @@ views:
     mounted: true
 toolbars:
   "TimeBar":
-    current_time: 1.119
+    current_time: 3.065
     min_time: 0
     max_time: 57.398
     frame_rate: 1000
@@ -295,17 +309,17 @@ viewAreas:
     contents:
       type: splitter
       orientation: horizontal
-      sizes: [ 1856, 627 ]
+      sizes: [ 1431, 484 ]
       children:
         -
           type: splitter
           orientation: horizontal
-          sizes: [ 480, 1371 ]
+          sizes: [ 370, 1056 ]
           children:
             -
               type: splitter
               orientation: vertical
-              sizes: [ 698, 698 ]
+              sizes: [ 545, 545 ]
               children:
                 -
                   type: pane
@@ -317,7 +331,7 @@ viewAreas:
             -
               type: splitter
               orientation: vertical
-              sizes: [ 1047, 349 ]
+              sizes: [ 818, 272 ]
               children:
                 -
                   type: pane
@@ -329,7 +343,7 @@ viewAreas:
         -
           type: splitter
           orientation: vertical
-          sizes: [ 305, 1091 ]
+          sizes: [ 238, 852 ]
           children:
             -
               type: pane
@@ -337,7 +351,7 @@ viewAreas:
             -
               type: splitter
               orientation: vertical
-              sizes: [ 423, 663 ]
+              sizes: [ 330, 517 ]
               children:
                 -
                   type: pane

@@ -1,0 +1,2 @@
+choreonoid_add_simple_controller(DynaBoxController DynaBoxController.cpp)
+target_link_libraries(DynaBoxController ${roscpp_LIBRARIES})

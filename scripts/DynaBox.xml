@@ -14,10 +14,10 @@
     </default>
     -->
     <default class="SHORTPLATE">
-      <geom type="box" size="0.45 0.45 0.025" rgba="0 0.6 0.6 0.1" />
+      <geom type="box" size="0.45 0.45 0.025" rgba="0 0.6 0.6 1" />
     </default>
     <default class="LONGPLATE">
-      <geom type="box" size="0.025 0.45 0.95" rgba="0 0.6 0.6 0.1" />
+      <geom type="box" size="0.025 0.45 0.95" rgba="0 0.6 0.6 1" />
     </default>
     <default class="BALL">
       <geom type="sphere" size="0.01" rgba="1 0 0 0.7" />

@@ -10,28 +10,28 @@ links:
     translation: [0, 0, 1]
     jointType: free
     centerOfMass: [0, 0, 0]
-    mass: 1.0
+    mass: 0.1
     inertia: [
-      0.0017, 0,   0,
-      0,   0.0017, 0,
-      0,   0,   0.0017 ]
+      0.00017, 0,   0,
+      0,   0.00017, 0,
+      0,   0,   0.00017 ]
     
   - 
     name: BOTTOM_PLATE
     parent: CENTER
-    translation: [0, 0, -0.8]
+    translation: [0, 0, -0.95]
     jointType: fixed
     centerOfMass: [0, 0, 0]
-    mass: &PLATEMASS 1.0
+    mass: &PLATEMASS 0.1
     inertia: &SHORTPLATEINERTIA [
-      0.03, 0,   0,
-      0,   0.03, 0,
-      0,   0,   0.06 ]
+      0.003, 0,   0,
+      0,   0.003, 0,
+      0,   0,   0.006 ]
     elements:
       Shape:
         geometry: &SHORTPLATE
           type: Box
-          size: [0.6, 0.6, 0.05]
+          size: [0.9, 0.9, 0.05]
         appearance: &PlateAppearance
           material:
             diffuseColor: [0, 0.6, 0.6]
@@ -40,7 +40,7 @@ links:
   - 
     name: TOP_PLATE
     parent: CENTER
-    translation: [0, 0, 0.8]
+    translation: [0, 0, 0.95]
     jointType: fixed
     centerOfMass: [0, 0, 0]
     mass: *PLATEMASS
@@ -52,25 +52,25 @@ links:
   - 
     name: FRONT_PLATE
     parent: CENTER
-    translation: [0.3 , 0, 0]
+    translation: [0.45 , 0, 0]
     jointType: fixed
     centerOfMass: [0, 0, 0]
     mass: *PLATEMASS
     inertia: &LONGPLATEINERTIA [
-      0.24, 0, 0,
-      0, 0.21, 0,
-      0, 0, 0.03
+      0.024, 0, 0,
+      0, 0.021, 0,
+      0, 0, 0.003
     ]
     elements:
       Shape:
         geometry: &LONGPLATE
           type: Box
-          size: [0.05, 0.6, 1.6]
+          size: [0.05, 0.9, 1.9]
         appearance: *PlateAppearance
   - 
     name: BACK_PLATE
     parent: CENTER
-    translation: [-0.3 , 0, 0]
+    translation: [-0.45 , 0, 0]
     jointType: fixed
     centerOfMass: [0, 0, 0]
     mass: *PLATEMASS
@@ -82,7 +82,7 @@ links:
   - 
     name: LEFT_PLATE
     parent: CENTER
-    translation: [0 , 0.3, 0]
+    translation: [0 , 0.45, 0]
     rotation: [0,0,1, 90]
     jointType: fixed
     centerOfMass: [0, 0, 0]
@@ -95,7 +95,7 @@ links:
   - 
     name: RIGHT_PLATE
     parent: CENTER
-    translation: [0 , -0.3, 0]
+    translation: [0 , -0.45, 0]
     rotation: [0,0,1, 90]
     jointType: fixed
     centerOfMass: [0, 0, 0]
@@ -106,111 +106,6 @@ links:
         geometry: *LONGPLATE
         appearance: *PlateAppearance
 
-# MARK:接触点
-  -
-    name: BALL_+++
-    parent: CENTER
-    translation: [0.35, 0.35, 0.85]
-    jointType: fixed
-    centerOfMass: [0, 0, 0]
-    mass: &BALLMASS 0.125
-    inertia: &BALLINERTIA [
-      0.0005, 0,   0,
-      0,   0.0005, 0,
-      0,   0,   0.0005 ]
-    elements:
-      Shape:
-        geometry: &BallGeometry
-          type: Sphere
-          radius: 0.1
-        appearance: &BallAppearance
-          material:
-            diffuseColor: [1, 0, 0]
-            transparency: 0.7
-  -
-    name: BALL_++-
-    parent: CENTER
-    translation: [0.35, 0.35, -0.85]
-    jointType: fixed
-    centerOfMass: [0, 0, 0]
-    mass: *BALLMASS
-    inertia: *BALLINERTIA
-    elements:
-      Shape:
-        geometry: *BallGeometry
-        appearance: *BallAppearance
-  -
-    name: BALL_+-+
-    parent: CENTER
-    translation: [0.35, -0.35, 0.85]
-    jointType: fixed
-    centerOfMass: [0, 0, 0]
-    mass: *BALLMASS
-    inertia: *BALLINERTIA
-    elements:
-      Shape:
-        geometry: *BallGeometry
-        appearance: *BallAppearance
-  -
-    name: BALL_-++
-    parent: CENTER
-    translation: [-0.35, 0.35, 0.85]
-    jointType: fixed
-    centerOfMass: [0, 0, 0]
-    mass: *BALLMASS
-    inertia: *BALLINERTIA
-    elements:
-      Shape:
-        geometry: *BallGeometry
-        appearance: *BallAppearance
-  -
-    name: BALL_--+
-    parent: CENTER
-    translation: [-0.35, -0.35, 0.85]
-    jointType: fixed
-    centerOfMass: [0, 0, 0]
-    mass: *BALLMASS
-    inertia: *BALLINERTIA
-    elements:
-      Shape:
-        geometry: *BallGeometry
-        appearance: *BallAppearance
-  -
-    name: BALL_+--
-    parent: CENTER
-    translation: [0.35, -0.35, -0.85]
-    jointType: fixed
-    centerOfMass: [0, 0, 0]
-    mass: *BALLMASS
-    inertia: *BALLINERTIA
-    elements:
-      Shape:
-        geometry: *BallGeometry
-        appearance: *BallAppearance
-  -
-    name: BALL_---
-    parent: CENTER
-    translation: [-0.35, -0.35, -0.85]
-    jointType: fixed
-    centerOfMass: [0, 0, 0]
-    mass: *BALLMASS
-    inertia: *BALLINERTIA
-    elements:
-      Shape:
-        geometry: *BallGeometry
-        appearance: *BallAppearance
-  -
-    name: BALL_-+-
-    parent: CENTER
-    translation: [-0.35, 0.35, -0.85]
-    jointType: fixed
-    centerOfMass: [0, 0, 0]
-    mass: *BALLMASS
-    inertia: *BALLINERTIA
-    elements:
-      Shape:
-        geometry: *BallGeometry
-        appearance: *BallAppearance
 
 # MARK:リアクションホイール
   - 
@@ -246,17 +141,16 @@ links:
     jointId: 1
     jointAxis: Y
     centerOfMass: [0, 0, 0]
-    mass: &WHEELMASS 2
+    mass: &WHEELMASS 1.5
     inertia: &WHEELINERTIA [
-      0.0036, 0,   0,
-      0,   0.0064, 0,
-      0,   0,   0.0036 ]
+      0.96, 0,   0,
+      0,   1.92, 0,
+      0,   0,   0.96 ]
     elements:
       Shape: &WHEELSHAPE
         geometry: 
-          type: Cylinder
-          height: 0.05
-          radius: 0.08
+          type: Box
+          size: [0.11, 0.05, 0.11]
         appearance:
           material:
             diffuseColor: [0.2, 0.8, 0.2]
@@ -297,7 +191,7 @@ links:
     rotation: *WHEEL_ROT
     jointType: revolute
     jointId: 4
-    jointAxis: Y
+    jointAxis: -Y
     centerOfMass: [0, 0, 0]
     mass: *WHEELMASS
     inertia: *WHEELINERTIA
@@ -310,7 +204,7 @@ links:
     rotation: *WHEEL_ROT
     jointType: revolute
     jointId: 5
-    jointAxis: Y
+    jointAxis: -Y
     centerOfMass: [0, 0, 0]
     mass: *WHEELMASS
     inertia: *WHEELINERTIA
@@ -377,7 +271,7 @@ links:
     rotation: *WHEEL_ROT
     jointType: revolute
     jointId: 10
-    jointAxis: Y
+    jointAxis: -Y
     centerOfMass: [0, 0, 0]
     mass: *WHEELMASS
     inertia: *WHEELINERTIA
@@ -390,7 +284,7 @@ links:
     rotation: *WHEEL_ROT
     jointType: revolute
     jointId: 11
-    jointAxis: Y
+    jointAxis: -Y
     centerOfMass: [0, 0, 0]
     mass: *WHEELMASS
     inertia: *WHEELINERTIA
@@ -444,7 +338,7 @@ links:
     translation: [0, 0, -0.07]
     rotation: [0, 1, 0, 90]
     jointType: prismatic
-    jointAxis: X
+    jointAxis: -X
     jointId: 15
     jointRange: *SLIDERANGE
     centerOfMass: [0, 0, 0]
@@ -459,7 +353,7 @@ links:
     rotation: *WHEEL_ROT
     jointType: revolute
     jointId: 16
-    jointAxis: Y
+    jointAxis: -Y
     centerOfMass: [0, 0, 0]
     mass: *WHEELMASS
     inertia: *WHEELINERTIA
@@ -472,7 +366,7 @@ links:
     rotation: *WHEEL_ROT
     jointType: revolute
     jointId: 17
-    jointAxis: Y
+    jointAxis: -Y
     centerOfMass: [0, 0, 0]
     mass: *WHEELMASS
     inertia: *WHEELINERTIA

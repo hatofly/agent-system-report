@@ -46,7 +46,6 @@ items:
           name: "AISTSimulator"
           plugin: Body
           class: AISTSimulatorItem
-          is_selected: true
           is_checked: true
           data:
             time_step: 0.001
@@ -61,7 +60,6 @@ items:
             record_collision_data: false
             controller_options: ""
             block_scene_view_edit_mode: false
-            time_sync_items: [ 5 ]
             dynamicsMode: "Forward dynamics"
             integrationMode: semi-implicit_euler
             gravity: [ 0, 0, -9.80665 ]
@@ -95,7 +93,8 @@ items:
               0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
               0, 0, 0, 0, 0, 0, 0, 0 ]
             initialJointDisplacements: [
-              -136.844, 79.466, 79.466 ]
+              -136.844, 79.466, 79.466, 0, 0, 0, 0, 0, 0, 0,
+              0, 0, 0, 0, 0, 0, 0, 0 ]
             initialRootPosition: [ 0, 0, 1 ]
             initialRootAttitude: [
               1, 0, 0,
@@ -119,7 +118,7 @@ views:
     class: ItemTreeView
     mounted: true
     state:
-      expanded: [ 1, 4 ]
+      expanded: [ 1 ]
   -
     id: 2
     plugin: Base
@@ -151,9 +150,9 @@ views:
         -
           camera: [ System, Perspective ]
           isCurrent: true
-          eye: [ 7.76146, 6.94445, 7.43733 ]
-          direction: [ -0.571136, -0.511595, -0.64193 ]
-          up: [ -0.478152, -0.428305, 0.766763 ]
+          eye: [ -1.18056, -1.7231, 4.61111 ]
+          direction: [ 0.151158, 0.342564, -0.927255 ]
+          up: [ 0.374332, 0.848338, 0.374432 ]
         -
           camera: [ System, Orthographic ]
           orthoHeight: 20

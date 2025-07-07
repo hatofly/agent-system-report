@@ -61,6 +61,7 @@ items:
             record_collision_data: false
             controller_options: ""
             block_scene_view_edit_mode: false
+            time_sync_items: [ 7 ]
             dynamicsMode: "Forward dynamics"
             integrationMode: semi-implicit_euler
             gravity: [ 0, 0, -9.80665 ]
@@ -84,15 +85,12 @@ items:
           data:
             file: "../src/DynaBox.body"
             format: CHOREONOID-BODY
-            rootPosition: [ 0.0, 0.0, 1.0 ]
+            rootPosition: [ 0, 0, 1 ]
             rootAttitude: [
               1, 0, 0,
               0, 1, 0,
               0, 0, 1 ]
             jointDisplacements: [
-              0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-              0, 0, 0, 0, 0, 0, 0, 0 ]
-            initialJointDisplacements: [
               0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
               0, 0, 0, 0, 0, 0, 0, 0 ]
             initialRootPosition: [ 0, 0, 1 ]
@@ -106,20 +104,20 @@ items:
             lock_location: false
             scene_sensitive: true
             zmp: [ 0, 0, 0 ]
-        -
-          id: 5
-          name: "DynaBoxController"
-          plugin: Body
-          class: SimpleControllerItem
-          is_selected: true
-          is_checked: true
-          data:
-            isNoDelayMode: false
-            controllerOptions: ""
-            controller: "../../../build/agent-system-report/lib/choreonoid-2.2/simplecontroller/DynaBoxController"
-            base_directory: "None"
-            reloading: false
-            export_symbols: false
+          children:
+            -
+              id: 6
+              name: "DynaBoxController"
+              plugin: Body
+              class: SimpleControllerItem
+              is_checked: true
+              data:
+                isNoDelayMode: false
+                controllerOptions: ""
+                controller: "../../../build/agent-system-report/lib/choreonoid-2.2/simplecontroller/DynaBoxController"
+                base_directory: "None"
+                reloading: false
+                export_symbols: false
 views:
   -
     id: 0
@@ -132,7 +130,7 @@ views:
     class: ItemTreeView
     mounted: true
     state:
-      expanded: [ 1, 4 ]
+      expanded: [ 1, 4, 6 ]
   -
     id: 2
     plugin: Base
@@ -164,9 +162,9 @@ views:
         -
           camera: [ System, Perspective ]
           isCurrent: true
-          eye: [ -1.96371, -4.9864, 1.33303 ]
+          eye: [ -2.03938, -10.7912, 3.11188 ]
           direction: [ 0.27729, 0.944512, -0.17609 ]
-          up: [ 0.0496032, 0.168959, 0.984374 ]
+          up: [ 0.0496031, 0.168959, 0.984374 ]
         -
           camera: [ System, Orthographic ]
           orthoHeight: 20
@@ -251,7 +249,7 @@ views:
     mounted: true
 toolbars:
   "TimeBar":
-    current_time: 3.065
+    current_time: 0
     min_time: 0
     max_time: 57.398
     frame_rate: 1000
@@ -309,17 +307,17 @@ viewAreas:
     contents:
       type: splitter
       orientation: horizontal
-      sizes: [ 1431, 484 ]
+      sizes: [ 1855, 628 ]
       children:
         -
           type: splitter
           orientation: horizontal
-          sizes: [ 370, 1056 ]
+          sizes: [ 480, 1370 ]
           children:
             -
               type: splitter
               orientation: vertical
-              sizes: [ 545, 545 ]
+              sizes: [ 698, 698 ]
               children:
                 -
                   type: pane
@@ -331,7 +329,7 @@ viewAreas:
             -
               type: splitter
               orientation: vertical
-              sizes: [ 818, 272 ]
+              sizes: [ 1048, 348 ]
               children:
                 -
                   type: pane
@@ -343,7 +341,7 @@ viewAreas:
         -
           type: splitter
           orientation: vertical
-          sizes: [ 238, 852 ]
+          sizes: [ 305, 1091 ]
           children:
             -
               type: pane
@@ -351,7 +349,7 @@ viewAreas:
             -
               type: splitter
               orientation: vertical
-              sizes: [ 330, 517 ]
+              sizes: [ 423, 663 ]
               children:
                 -
                   type: pane

@@ -225,7 +225,7 @@ links:
     parent: CENTER
     translation: [0, 0.07, 0]
     rotation: [0, 0, 1, 90]
-    jointType: prismatic
+    jointType: fixed
     jointAxis: Z
     jointId: 6
     jointRange: &SLIDERANGE [-0.5, 0.5]
@@ -290,7 +290,7 @@ links:
     parent: CENTER
     translation: [0, -0.07, 0]
     rotation: [0, 0, 1, -90]
-    jointType: prismatic
+    jointType: fixed
     jointAxis: Z
     jointId: 9
     jointRange: *SLIDERANGE

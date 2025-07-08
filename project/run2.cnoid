@@ -61,7 +61,7 @@ items:
           data:
             file: "../src/DynaBox.body"
             format: CHOREONOID-BODY
-            rootPosition: [ 12.1083586, 1.0798989, 1.22626532 ]
+            rootPosition: [ 12.0474286, 1.10712835, 1.09366046 ]
             rootAttitude: [
               1, 0, 0,
               0, 1, 0,
@@ -108,7 +108,7 @@ items:
               1, 0, 0,
               0, 1, 0,
               0, 0, 1 ]
-            jointDisplacements: [ 2.47019e-14, 0, 1.28707e-14, 0, -2.5346e-14 ]
+            jointDisplacements: [ -7.60635e-15, 0, -1.40072e-14, 0, 6.81211e-15 ]
             initialJointDisplacements: [ 0, 0, 0, 0, 0 ]
             initialRootPosition: [ 0, 0, 0 ]
             initialRootAttitude: [
@@ -165,9 +165,9 @@ views:
         -
           camera: [ System, Perspective ]
           isCurrent: true
-          eye: [ 13.1783, 20.7261, 0.337552 ]
-          direction: [ 0.0720314, -0.993071, 0.092853 ]
-          up: [ -0.00671735, 0.0926097, 0.99568 ]
+          eye: [ 12.9802, 31.6808, 3.90088 ]
+          direction: [ -0.106064, -0.981987, -0.156369 ]
+          up: [ -0.0167917, -0.155465, 0.987699 ]
         -
           camera: [ System, Orthographic ]
           orthoHeight: 20
@@ -248,7 +248,7 @@ views:
     mounted: true
 toolbars:
   "TimeBar":
-    current_time: 3.308
+    current_time: 2.173
     min_time: 0
     max_time: 57.398
     frame_rate: 1000

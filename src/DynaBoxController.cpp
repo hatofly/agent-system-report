@@ -12,6 +12,7 @@
 #include <cnoid/BodyItem>
 #include <cnoid/RateGyroSensor>
 #define LOWPASS_N 20
+#define CYCLE_N 5
 
 using namespace cnoid;
 class DynaBoxController1 : public SimpleController
@@ -30,6 +31,8 @@ class DynaBoxController1 : public SimpleController
     const double pitch_Kp = 200;//60はでかすぎ 50は足りない
     const double pitch_Kd = pitch_Kp * 0.5; // Proportional and derivative gains for pitch control
     const double z_gain = 5; // Gain for equalizing z prismatic pos
+    const double prs_limit_gain = 200;
+    const double prs_limit_offset = 50;
     ros::Publisher pub_PT;
     ros::Publisher pub_IMU;
     Eigen::Vector3d euler; // Euler angles
@@ -38,10 +41,11 @@ class DynaBoxController1 : public SimpleController
     Eigen::Quaterniond imu_quat; // Quaternion for orientation
     Eigen::Quaterniond imu_quat_der; // Previous quaternion for orientation
     double simtime = 0.0; // Simulation time
-    const double jumptime = 2.0;
-    const double landtime = 1.0;
+    const double jumptime = 1.0;
+    const double landtime = 2.0;
     const double resttime = 1.0; //gyroが積算してバグるので途中でちょいちょい休む
-    const double jumpcycle = jumptime + landtime; //; + resttime; // Total time for one jump cycle
+    const double jumpcyle_once = jumptime + landtime;
+    const double jumpcycle = (jumpcyle_once)*CYCLE_N + resttime; // Total time for one jump cycle
     int stepcount = 0;
 
 public:
@@ -97,17 +101,27 @@ public:
         /*
 
         */
-        /* 
-        // region:ROTATION CMOUT START
+        
         // MARK: Jump Function(based on time)
-        if (std::fmod(simtime, jumpcycle) < jumptime){
+        double zforce = 0.0; // Initialize z force
+        if (std::fmod(simtime,jumpcycle) > jumpcyle_once * CYCLE_N){
+            zforce = 0;
+        }else if (std::fmod(std::fmod(simtime, jumpcycle), jumpcyle_once) < jumptime ){
             // Apply Force to Joints
-            apply_limitedforce(500,0); // Apply a force of maxForce to each joint
-        }else if (std::fmod(simtime, jumpcycle) < jumptime + landtime){
-            apply_limitedforce(100, 0);
+            zforce = 450;
         }else{
-            apply_limitedforce(0, 0); // Reset the force for the first joint
+            zforce = -150;
         }
+        // Limit Joint Q
+        double jointq = joints[0]->q(); // Get the joint position
+        if (jointq > 0.5) {
+            zforce = -prs_limit_offset - prs_limit_gain * (jointq - 0.5); // Apply force to limit joint position
+        } else if (jointq < -0.5) {
+            zforce =  prs_limit_offset -prs_limit_gain * (jointq + 0.5); // Apply force to limit joint position
+        }
+        zforce += 150; // Add a constant force to the z direction for gravity compensation
+        // Apply force to the first joint
+        apply_limitedforce(zforce, 0); // Apply force to the first joint
         
         // MARK: Jump Function(constant force)
 
@@ -125,7 +139,7 @@ public:
         double pitch_torque = - ( pitch_Kp * (pitch - target_pitch) + pitch_Kd * pitch_vel); // PD control
         for (size_t i = 1; i < 5; ++i)
         {
-            if (std::fmod(simtime, jumpcycle) > jumptime + landtime){
+            if (std::fmod(simtime, jumpcycle) > (jumpcyle_once)*CYCLE_N){
                 // Apply force to the first four joints
                 apply_limitedforce(0, i); // Apply torque to the first four joints
                 euler.setZero(); // Reset euler angles after jump
@@ -135,11 +149,6 @@ public:
         }
         // apply_limitedforce(pitch_torque, 1); // Apply torque to the first joint
         prev_pitch = pitch;
-
-       for (size_t i = 1; i < 5; ++i)
-        {
-            joints[i]->u() = 10.0; 
-        }
 
         // MARK: Publish Pitch and Translation
         std_msgs::Float64MultiArray msg;
@@ -152,12 +161,7 @@ public:
         pub_PT.publish(msg);
         // MARK: Simulation Time
         simtime += dt; // Increment simulation time
-        // endregion:ROTATION CMOUT END
-        */
-        for (size_t i = 1; i < 5; ++i)
-        {
-            apply_limitedforce(100,i); // Reset the torque for all joints
-        }
+
         return true;
     }
     // MARK: Power Limitter
@@ -191,6 +195,7 @@ public:
         stepcount++;
         stepcount %= LOWPASS_N; // Keep stepcount within bounds
     }
+
     
 };
 CNOID_IMPLEMENT_SIMPLE_CONTROLLER_FACTORY(DynaBoxController1)

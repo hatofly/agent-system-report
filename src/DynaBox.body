@@ -36,7 +36,7 @@ links:
       Shape:
         geometry: &SHORTPLATE
           type: Box
-          size: [0.9, 0.9, 0.05]
+          size: [0.7, 0.7, 0.05]
         appearance: &PlateAppearance
           material:
             diffuseColor: [0, 0.6, 0.6]
@@ -62,7 +62,7 @@ links:
   - 
     name: FRONT_PLATE
     parent: CENTER
-    translation: [0.45 , 0, 0]
+    translation: [0.32 , 0, 0]
     jointType: fixed
     centerOfMass: [0, 0, 0]
     mass: *PLATEMASS
@@ -75,12 +75,12 @@ links:
       Shape:
         geometry: &LONGPLATE
           type: Box
-          size: [0.05, 0.9, 1.9]
+          size: [0.05, 0.7, 1.9]
         appearance: *PlateAppearance
   - 
     name: BACK_PLATE
     parent: CENTER
-    translation: [-0.45 , 0, 0]
+    translation: [-0.32 , 0, 0]
     jointType: fixed
     centerOfMass: [0, 0, 0]
     mass: *PLATEMASS
@@ -92,7 +92,7 @@ links:
   - 
     name: LEFT_PLATE
     parent: CENTER
-    translation: [0 , 0.45, 0]
+    translation: [0 , 0.32, 0]
     rotation: [0,0,1, 90]
     jointType: fixed
     centerOfMass: [0, 0, 0]
@@ -105,7 +105,7 @@ links:
   - 
     name: RIGHT_PLATE
     parent: CENTER
-    translation: [0 , -0.45, 0]
+    translation: [0 , -0.32, 0]
     rotation: [0,0,1, 90]
     jointType: fixed
     centerOfMass: [0, 0, 0]
@@ -222,7 +222,7 @@ links:
   #     Shape: *WHEELSHAPE
   - name: REACTION_BASE_CENTER
     parent: CENTER
-    translation: [0, 0, 0]
+    translation: [0, -0.003, 0]
     jointType: prismatic
     jointAxis: Z
     jointId: 0
@@ -341,16 +341,20 @@ links:
   
   # - 
   #   name: REACTION_BASE_UP
-  #   parent: CENTER
+  #   parent: REACTION_BASE_CENTER
   #   translation: [0, 0, 0.07]
   #   rotation: [0, 1, 0, -90]
-  #   jointType: prismatic
-  #   jointAxis: X
-  #   jointId: 12
-  #   jointRange: *SLIDERANGE
+  #   jointType: fixed
+  #   # jointAxis: X
+  #   # jointId: 12
+  #   # jointRange: *SLIDERANGE
   #   centerOfMass: [0, 0, 0]
-  #   mass: *REACTION_BASE_MASS
-  #   inertia: *REACTION_BASE_INERTIA
+  #   mass: 0.1
+  #   inertia: [
+  #     0.00017, 0,   0,
+  #     0,   0.00017, 0,
+  #     0,   0,   0.00017
+  #   ]
   #   elements:
   #     Shape: *REACTION_BASE_SHAPE
   # -

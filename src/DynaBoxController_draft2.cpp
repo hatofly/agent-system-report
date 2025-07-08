@@ -13,7 +13,7 @@
 #include <cnoid/RateGyroSensor>
 #include<string>
 #define LOWPASS_N 20
-#define CYCLE_N 2
+#define CYCLE_N 5
 
 using namespace cnoid;
 class DynaBoxController1 : public SimpleController
@@ -34,7 +34,7 @@ class DynaBoxController1 : public SimpleController
     const double z_gain = 5; // Gain for equalizing z prismatic pos
     const double prs_limit_gain = 200;
     const double prs_limit_offset = 50;
-    const double wheelvelgain = 2000.0;
+    const double wheelvelgain = 1.0;
     ros::Publisher pub_PT;
     ros::Publisher pub_IMU;
     Eigen::Vector3d euler; // Euler angles
@@ -45,10 +45,12 @@ class DynaBoxController1 : public SimpleController
     double simtime = 0.0; // Simulation time
     const double jumptime = 1.0;
     const double landtime = 2.0;
-    const double resttime = 6.0; //gyroが積算してバグるので途中でちょいちょい休む
+    const double resttime = 1.0; //gyroが積算してバグるので途中でちょいちょい休む
     const double jumpcyle_once = jumptime + landtime;
     const double jumpcycle = (jumpcyle_once)*CYCLE_N + resttime; // Total time for one jump cycle
     int stepcount = 0;
+    const string state ="";
+
 public:
     virtual bool initialize(SimpleControllerIO *io) override
     {
@@ -106,7 +108,7 @@ public:
         // MARK: Jump Function(based on time)
         double zforce = 0.0; // Initialize z force
         if (std::fmod(simtime,jumpcycle) > jumpcyle_once * CYCLE_N){
-            zforce = -200;
+            zforce = 0;
         }else if (std::fmod(std::fmod(simtime, jumpcycle), jumpcyle_once) < jumptime ){
             // Apply Force to Joints
             zforce = 450;
@@ -142,10 +144,7 @@ public:
         {
             if (std::fmod(simtime, jumpcycle) > (jumpcyle_once)*CYCLE_N){
                 // Apply force to the first four joints
-                // apply_limitedforce(0, i); // Apply torque to the first four joints
-                double wheelvel = joints[i]->dq(); // Get the joint velocity
-                double wheelforce = std::min(std::max(-wheelvelgain * wheelvel,-10000.0),10000.0); // Calculate the force based on wheel
-                apply_limitedforce(wheelforce, i); // Apply force to the first four joints
+                apply_limitedforce(0, i); // Apply torque to the first four joints
                 euler.setZero(); // Reset euler angles after jump
             }else{
                 apply_limitedforce(pitch_torque,i); // Reset the torque for the first four joints

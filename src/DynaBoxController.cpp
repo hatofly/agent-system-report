@@ -27,12 +27,12 @@ class DynaBoxController1 : public SimpleController
 
     double prev_pitch = 0.0; // Previous pitch angle for control
     double target_pitch = 30*(3.14/180); // Target pitch angle for control
-    const double pitch_Kp = 5;//60はでかすぎ 50は足りない
-    const double pitch_Kd = pitch_Kp * 0.01; // Proportional and derivative gains for pitch control
+    const double pitch_Kp = 150;//60はでかすぎ 50は足りない
+    const double pitch_Kd = pitch_Kp * 0.1; // Proportional and derivative gains for pitch control
     ros::Publisher pub_PT;
     ros::Publisher pub_IMU;
-    Eigen::Vector3d w_sum[LOWPASS_N]; // Array to hold angular velocity for low-pass filtering
-    Eigen::Vector3d w;
+    Eigen::Vector3d euler; // Euler angles
+    Eigen::Vector3d w; // Angular velocity
     sensor_msgs::Imu imu_msg; // IMU message for publishing orientation data
     Eigen::Quaterniond imu_quat; // Quaternion for orientation
     Eigen::Quaterniond imu_quat_der; // Previous quaternion for orientation
@@ -82,9 +82,7 @@ public:
         imu_msg.orientation.z = 0.0;
         imu_msg.orientation.w = 0.0;
 
-        for (int i = 0; i < LOWPASS_N; ++i) {
-            w_sum[i].setZero(); // Initialize the angular velocity sum
-        }
+        euler.setZero(); // Initialize euler angles
         return true;
     }
     virtual bool control() override
@@ -146,16 +144,10 @@ public:
         }
         //Eigen::Matrix3d R_temp = center->position().rotation();
         //double pitch = std::asin(R_temp(2, 0)); // Get the pitch angle
-        w_sum[stepcount] = gyro->w(); // Accumulate angular velocity
-        w.setZero(); // Initialize angular velocity vector
-        for (int i = 0; i < LOWPASS_N; ++i)
-        {
-            w += w_sum[i]; // Sum the angular velocities
-        }
-        w /= LOWPASS_N; // Average the angular velocities
+        euler  += gyro->w()*dt; // Accumulate angular velocity
 
         /// angular velocity
-        double pitch = w(1); // Get the pitch angle
+        double pitch = euler(1); // Get the pitch angle
 
         double pitch_vel = (pitch - prev_pitch) / dt; // Get the pitch velocity
         double pitch_torque = - ( pitch_Kp * (pitch - target_pitch) + pitch_Kd * pitch_vel); // PD control

@@ -150,7 +150,7 @@ class SimMain():
             #カメラ用のコンテキストをセット
             #context = mujoco.MjRenderContextOffscreen(m)
             #cam_id = mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_CAMERA, "eye")
-
+            time.sleep(10)
 
             while viewer.is_running():
                 step_start = time.time()

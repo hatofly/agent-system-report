@@ -6,18 +6,19 @@
     <texture name="texplane" type="2d" builtin="checker" rgb1=".25 .25 .25" rgb2=".3 .3 .3"
       width="512" height="512" mark="cross" markrgb=".8 .8 .8" />
     <material name="matplane" reflectance="0.3" texture="texplane" texrepeat="1 1" texuniform="true" />
+    <texture type="skybox" builtin="gradient" rgb1="1 1 1" rgb2="1 1 1" width="256" height="256"/>
   </asset>
   <default>
-    <!--
+<!--     
     <default class="PLATE">
       <inertial mass="1.0" pos="0 0 0" diaginertia="0.1 0.1 0.1"/>
     </default>
     -->
     <default class="SHORTPLATE">
-      <geom type="box" size="0.45 0.45 0.025" rgba="0 0.6 0.6 1" />
+      <geom type="box" size="0.45 0.45 0.025" rgba="0 0.6 0.6 0.1" />
     </default>
     <default class="LONGPLATE">
-      <geom type="box" size="0.025 0.45 0.95" rgba="0 0.6 0.6 1" />
+      <geom type="box" size="0.025 0.45 0.95" rgba="0 0.6 0.6 0.1" />
     </default>
     <default class="BALL">
       <geom type="sphere" size="0.01" rgba="1 0 0 0.7" />
@@ -63,38 +64,7 @@
         <geom class="LONGPLATE" />
       </body>
       <!-- MARK: CONTACT BALLS -->
-      <body name="BALL_+++" pos="0.35 0.35 0.85">
-        <inertial mass="0.0125" pos="0 0 0" diaginertia="0.00005 0.00005 0.00005" />
-        <geom class="BALL" />
-      </body>
-      <body name="BALL_++-" pos="0.35 0.35 -0.85">
-        <inertial mass="0.0125" pos="0 0 0" diaginertia="0.00005 0.00005 0.00005" />
-        <geom class="BALL" />
-      </body>
-      <body name="BALL_+-+" pos="0.35 -0.35 0.85">
-        <inertial mass="0.0125" pos="0 0 0" diaginertia="0.00005 0.00005 0.00005" />
-        <geom class="BALL" />
-      </body>
-      <body name="BALL_-++" pos="-0.35 0.35 0.85">
-        <inertial mass="0.0125" pos="0 0 0" diaginertia="0.00005 0.00005 0.00005" />
-        <geom class="BALL" />
-      </body>
-      <body name="BALL_+--" pos="0.35 -0.35 -0.85">
-        <inertial mass="0.0125" pos="0 0 0" diaginertia="0.00005 0.00005 0.00005" />
-        <geom class="BALL" />
-      </body>
-      <body name="BALL_-+-" pos="-0.35 0.35 -0.85">
-        <inertial mass="0.0125" pos="0 0 0" diaginertia="0.00005 0.00005 0.00005" />
-        <geom class="BALL" />
-      </body>
-      <body name="BALL_--+" pos="-0.35 -0.35 0.85">
-        <inertial mass="0.0125" pos="0 0 0" diaginertia="0.00005 0.00005 0.00005" />
-        <geom class="BALL" />
-      </body>
-      <body name="BALL_---" pos="-0.35 -0.35 -0.85">
-        <inertial mass="0.0125" pos="0 0 0" diaginertia="0.00005 0.00005 0.00005" />
-        <geom class="BALL" />
-      </body>
+
       <!-- MARK:REACTION WHEEL -->
       <body name="REACTION_UNIT_BASE">
         <joint name="REACTION_UNIT_PRISMATIC" type="slide" axis="0 0 1" limited="true"

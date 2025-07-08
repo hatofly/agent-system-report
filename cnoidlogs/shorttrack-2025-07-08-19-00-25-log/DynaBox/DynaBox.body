@@ -1,0 +1,270 @@
+format: ChoreonoidBody
+format_version: 2.0
+angle_unit: degree
+name: "DynaBox"
+root_link: "CENTER"
+links:
+  -
+    name: "CENTER"
+    translation: [ 0, 0, 1 ]
+    joint_name: "CENTER"
+    joint_type: free
+    mass: 1
+    center_of_mass: [ 0, 0, 0 ]
+    inertia: [
+      1, 0, 0,
+      0, 1, 0,
+      0, 0, 1 ]
+    root: true
+    elements:
+      -
+        type: RateGyroSensor
+        name: "GYRO"
+        id: 0
+  -
+    name: "BOTTOM_PLATE"
+    parent: "CENTER"
+    translation: [ 0, 0, -0.95 ]
+    joint_name: "BOTTOM_PLATE"
+    joint_type: fixed
+    mass: 0.1
+    center_of_mass: [ 0, 0, 0 ]
+    inertia: [
+      0.003, 0, 0,
+      0, 0.003, 0,
+      0, 0, 0.006 ]
+    elements:
+      -
+        type: Shape
+        appearance:
+          material: &A0
+            diffuse: [ 0, 0.6, 0.6 ]
+            specular_exponent: 77.2
+        geometry: &A1
+          type: Box
+          size: [ 0.7, 0.7, 0.05 ]
+  -
+    name: "TOP_PLATE"
+    parent: "CENTER"
+    translation: [ 0, 0, 0.95 ]
+    joint_name: "TOP_PLATE"
+    joint_type: fixed
+    mass: 0.1
+    center_of_mass: [ 0, 0, 0 ]
+    inertia: [
+      0.003, 0, 0,
+      0, 0.003, 0,
+      0, 0, 0.006 ]
+    elements:
+      -
+        type: Shape
+        appearance:
+          material: *A0
+        geometry: *A1
+  -
+    name: "FRONT_PLATE"
+    parent: "CENTER"
+    translation: [ 0.32, 0, 0 ]
+    joint_name: "FRONT_PLATE"
+    joint_type: fixed
+    mass: 0.1
+    center_of_mass: [ 0, 0, 0 ]
+    inertia: [
+      0.024, 0, 0,
+      0, 0.021, 0,
+      0, 0, 0.003 ]
+    elements:
+      -
+        type: Shape
+        appearance:
+          material: *A0
+        geometry: &A2
+          type: Box
+          size: [ 0.05, 0.7, 1.9 ]
+  -
+    name: "BACK_PLATE"
+    parent: "CENTER"
+    translation: [ -0.32, 0, 0 ]
+    joint_name: "BACK_PLATE"
+    joint_type: fixed
+    mass: 0.1
+    center_of_mass: [ 0, 0, 0 ]
+    inertia: [
+      0.024, 0, 0,
+      0, 0.021, 0,
+      0, 0, 0.003 ]
+    elements:
+      -
+        type: Shape
+        appearance:
+          material: *A0
+        geometry: *A2
+  -
+    name: "LEFT_PLATE"
+    parent: "CENTER"
+    translation: [ 0, 0.32, 0 ]
+    rotation: [ 0, 0, 1, 90 ]
+    joint_name: "LEFT_PLATE"
+    joint_type: fixed
+    mass: 0.1
+    center_of_mass: [ 0, 0, 0 ]
+    inertia: [
+      0.024, 0, 0,
+      0, 0.021, 0,
+      0, 0, 0.003 ]
+    elements:
+      -
+        type: Shape
+        appearance:
+          material: *A0
+        geometry: *A2
+  -
+    name: "RIGHT_PLATE"
+    parent: "CENTER"
+    translation: [ 0, -0.32, 0 ]
+    rotation: [ 0, 0, 1, 90 ]
+    joint_name: "RIGHT_PLATE"
+    joint_type: fixed
+    mass: 0.1
+    center_of_mass: [ 0, 0, 0 ]
+    inertia: [
+      0.024, 0, 0,
+      0, 0.021, 0,
+      0, 0, 0.003 ]
+    elements:
+      -
+        type: Shape
+        appearance:
+          material: *A0
+        geometry: *A2
+  -
+    name: "REACTION_BASE_CENTER"
+    parent: "CENTER"
+    joint_name: "REACTION_BASE_CENTER"
+    joint_type: prismatic
+    joint_axis: [ 0, 0, 1 ]
+    joint_id: 0
+    joint_range: [ -0.5, 0.5 ]
+    mass: 0.1
+    center_of_mass: [ 0, 0, 0 ]
+    inertia: [
+      0.00017, 0, 0,
+      0, 0.00017, 0,
+      0, 0, 0.00017 ]
+  -
+    name: "REACTION_BASE_LEFT"
+    parent: "REACTION_BASE_CENTER"
+    translation: [ 0, 0.07, 0 ]
+    rotation: [ 0, 0, 1, 90 ]
+    joint_name: "REACTION_BASE_LEFT"
+    joint_type: fixed
+    mass: 2
+    center_of_mass: [ 0, 0, 0 ]
+    inertia: [
+      0.00083, 0, 0,
+      0, 0.00042, 0,
+      0, 0, 0.00042 ]
+    elements:
+      - &A4
+        type: Shape
+        appearance:
+          material:
+            diffuse: [ 0.7, 0.7, 0.2 ]
+            specular_exponent: 64.5
+            transparency: 0.5
+        geometry:
+          type: Box
+          size: [ 0.01, 0.1, 0.1 ]
+  -
+    name: "REACTION_WHEEL_LEFT_1"
+    parent: "REACTION_BASE_LEFT"
+    translation: [ 0.055, 0, 0 ]
+    rotation: [ 0, 0, 1, 90 ]
+    joint_name: "REACTION_WHEEL_LEFT_1"
+    joint_type: revolute
+    joint_axis: [ 0, 1, 0 ]
+    joint_id: 7
+    mass: 4
+    center_of_mass: [ 0, 0, 0 ]
+    inertia: [
+      0.96, 0, 0,
+      0, 1.92, 0,
+      0, 0, 0.96 ]
+    elements:
+      - &A3
+        type: Shape
+        appearance:
+          material:
+            diffuse: [ 0.2, 0.8, 0.2 ]
+            specular_exponent: 64.5
+            transparency: 0.5
+        geometry:
+          type: Cylinder
+          radius: 0.01
+          height: 0.01
+  -
+    name: "REACTION_WHEEL_LEFT_2"
+    parent: "REACTION_BASE_LEFT"
+    translation: [ 0.13, 0, 0 ]
+    rotation: [ 0, 0, 1, 90 ]
+    joint_name: "REACTION_WHEEL_LEFT_2"
+    joint_type: revolute
+    joint_axis: [ 0, 1, 0 ]
+    joint_id: 8
+    mass: 4
+    center_of_mass: [ 0, 0, 0 ]
+    inertia: [
+      0.96, 0, 0,
+      0, 1.92, 0,
+      0, 0, 0.96 ]
+    elements:
+      - *A3
+  -
+    name: "REACTION_BASE_RIGHT"
+    parent: "REACTION_BASE_CENTER"
+    translation: [ 0, -0.07, 0 ]
+    rotation: [ 0, 0, -1, 90 ]
+    joint_name: "REACTION_BASE_RIGHT"
+    joint_type: fixed
+    mass: 2
+    center_of_mass: [ 0, 0, 0 ]
+    inertia: [
+      0.00083, 0, 0,
+      0, 0.00042, 0,
+      0, 0, 0.00042 ]
+    elements:
+      - *A4
+  -
+    name: "REACTION_WHEEL_RIGHT_1"
+    parent: "REACTION_BASE_RIGHT"
+    translation: [ 0.055, 0, 0 ]
+    rotation: [ 0, 0, 1, 90 ]
+    joint_name: "REACTION_WHEEL_RIGHT_1"
+    joint_type: revolute
+    joint_axis: [ -0, -1, -0 ]
+    joint_id: 10
+    mass: 4
+    center_of_mass: [ 0, 0, 0 ]
+    inertia: [
+      0.96, 0, 0,
+      0, 1.92, 0,
+      0, 0, 0.96 ]
+    elements:
+      - *A3
+  -
+    name: "REACTION_WHEEL_RIGHT_2"
+    parent: "REACTION_BASE_RIGHT"
+    translation: [ 0.13, 0, 0 ]
+    rotation: [ 0, 0, 1, 90 ]
+    joint_name: "REACTION_WHEEL_RIGHT_2"
+    joint_type: revolute
+    joint_axis: [ -0, -1, -0 ]
+    joint_id: 11
+    mass: 4
+    center_of_mass: [ 0, 0, 0 ]
+    inertia: [
+      0.96, 0, 0,
+      0, 1.92, 0,
+      0, 0, 0.96 ]
+    elements:
+      - *A3

@@ -23,7 +23,7 @@ items:
           class: BodyItem
           is_checked: true
           data:
-            file: "../../choreonoid/ext/vnoid/model/field2022/field2022_shorttrack.body"
+            file: "shorttrack-2025-07-08-18-48-14-log/Floor/Floor.body"
             format: CHOREONOID-BODY
             rootPosition: [ 0, 0, 0 ]
             rootAttitude: [
@@ -46,93 +46,33 @@ items:
             lock_location: false
             scene_sensitive: true
             zmp: [ 0, 0, 0 ]
-          children:
-            -
-              id: 3
-              name: "SimpleController"
-              plugin: Body
-              class: SimpleControllerItem
-              is_checked: true
-              data:
-                isNoDelayMode: false
-                controllerOptions: ""
-                controller: "vnoid_shorttrack_controller"
-                base_directory: "Controller directory"
-                reloading: false
-                export_symbols: false
         -
-          id: 4
+          id: 3
           name: "AISTSimulator"
-          plugin: Body
-          class: AISTSimulatorItem
-          is_selected: true
+          plugin: Base
+          class: FolderItem
           is_checked: true
-          data:
-            time_step: 0.001
-            realtime_sync_mode: compensatory
-            recording: full
-            time_range_mode: unlimited
-            time_length: 180
-            is_active_control_time_range_mode: false
-            output_all_link_positions: false
-            output_device_states: true
-            use_controller_threads: true
-            record_collision_data: false
-            controller_options: ""
-            block_scene_view_edit_mode: false
-            dynamicsMode: "Forward dynamics"
-            integrationMode: semi-implicit_euler
-            gravity: [ 0, 0, -9.80665 ]
-            min_friction_coefficient: 0
-            max_friction_coefficient: 100
-            cullingThresh: 0.005
-            contactCullingDepth: 0.05
-            errorCriterion: 0.001
-            maxNumIterations: 25
-            contactCorrectionDepth: 0.00025
-            contactCorrectionVelocityRatio: 5
-            kinematicWalking: false
-            2Dmode: false
-            oldAccelSensorMode: false
           children:
             -
-              id: 5
+              id: 4
               name: "WorldLogFile"
               plugin: Body
               class: WorldLogFileItem
+              is_selected: true
               is_checked: true
               data:
-                file: "../cnoidlogs/shorttrack"
+                file: "shorttrack-2025-07-08-18-48-14-log/shorttrack-2025-07-08-18-48-14"
                 format: CNOID-WORLD-LOG
-                timeStampSuffix: true
+                timeStampSuffix: false
                 recordingFrameRate: 0.01
-            -
-              id: 6
-              name: "GLVisionSimulator"
-              plugin: Body
-              class: GLVisionSimulatorItem
-              is_checked: true
-              data:
-                enabled: true
-                max_frame_rate: 1000
-                max_latency: 1
-                record_vision_data: false
-                thread_mode: Sensor
-                best_effort: true
-                all_scene_objects: true
-                range_sensor_precision_ratio: 2
-                depth_error: 0
-                enable_head_light: true
-                enable_additional_lights: true
-                antialiasing: false
         -
-          id: 7
+          id: 5
           name: "DynaBox"
           plugin: Body
           class: BodyItem
           is_checked: true
           data:
-            file: "../src/DynaBox.body"
+            file: "shorttrack-2025-07-08-18-48-14-log/DynaBox/DynaBox.body"
             format: CHOREONOID-BODY
             rootPosition: [ 0, 0, 1 ]
             rootAttitude: [
@@ -153,20 +93,6 @@ items:
             lock_location: false
             scene_sensitive: true
             zmp: [ 0, 0, 0 ]
-          children:
-            -
-              id: 8
-              name: "DynaBoxController"
-              plugin: Body
-              class: SimpleControllerItem
-              is_checked: true
-              data:
-                isNoDelayMode: false
-                controllerOptions: ""
-                controller: "../../../build/agent-system-report/lib/choreonoid-2.2/simplecontroller/DynaBoxController"
-                base_directory: "None"
-                reloading: false
-                export_symbols: false
 views:
   -
     id: 0
@@ -179,7 +105,7 @@ views:
     class: ItemTreeView
     mounted: true
     state:
-      expanded: [ 1, 2, 4, 7, 8 ]
+      expanded: [ 1, 2, 3, 5 ]
   -
     id: 2
     plugin: Base
@@ -211,7 +137,7 @@ views:
         -
           camera: [ System, Perspective ]
           isCurrent: true
-          eye: [ -12.2912, -15.3671, 11.7644 ]
+          eye: [ -14.2693, -24.0456, 17.1371 ]
           direction: [ 0.618714, 0.631015, -0.467988 ]
           up: [ 0.327644, 0.334159, 0.883735 ]
         -
@@ -273,9 +199,6 @@ views:
       body_items:
         -
           id: 2
-          selected_links: [ 0 ]
-        -
-          id: 7
           selected_links: [ 0 ]
   -
     id: 7
@@ -344,7 +267,7 @@ Body:
         show_cm_projection: false
         show_zmp: false
       -
-        body_item: 7
+        body_item: 5
         show_cm: false
         show_cm_projection: false
         show_zmp: false

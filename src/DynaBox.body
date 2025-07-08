@@ -40,7 +40,7 @@ links:
         appearance: &PlateAppearance
           material:
             diffuseColor: [0, 0.6, 0.6]
-            transparency: 0.8
+            transparency: 0
             shininess: 0.6
 
   # - 
@@ -222,7 +222,7 @@ links:
   #     Shape: *WHEELSHAPE
   - name: REACTION_BASE_CENTER
     parent: CENTER
-    translation: [0, -0.003, 0]
+    translation: [0, 0, 0]
     jointType: prismatic
     jointAxis: Z
     jointId: 0

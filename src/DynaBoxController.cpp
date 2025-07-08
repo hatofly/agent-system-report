@@ -13,7 +13,7 @@
 #include <cnoid/RateGyroSensor>
 #include<string>
 #define LOWPASS_N 20
-#define CYCLE_N 2
+#define CYCLE_N 1
 
 using namespace cnoid;
 class DynaBoxController1 : public SimpleController
@@ -30,7 +30,7 @@ class DynaBoxController1 : public SimpleController
     double prev_pitch = 0.0; // Previous pitch angle for control
     double target_pitch = 30*(3.14/180); // Target pitch angle for control
     const double pitch_Kp = 200;//60はでかすぎ 50は足りない
-    const double pitch_Kd = pitch_Kp * 0.5; // Proportional and derivative gains for pitch control
+    const double pitch_Kd = pitch_Kp * 0.8; // Proportional and derivative gains for pitch control
     const double z_gain = 5; // Gain for equalizing z prismatic pos
     const double prs_limit_gain = 200;
     const double prs_limit_offset = 50;
@@ -45,7 +45,7 @@ class DynaBoxController1 : public SimpleController
     double simtime = 0.0; // Simulation time
     const double jumptime = 1.0;
     const double landtime = 2.0;
-    const double resttime = 6.0; //gyroが積算してバグるので途中でちょいちょい休む
+    const double resttime = 0.0; //gyroが積算してバグるので途中でちょいちょい休む
     const double jumpcyle_once = jumptime + landtime;
     const double jumpcycle = (jumpcyle_once)*CYCLE_N + resttime; // Total time for one jump cycle
     int stepcount = 0;
@@ -144,7 +144,7 @@ public:
                 // Apply force to the first four joints
                 // apply_limitedforce(0, i); // Apply torque to the first four joints
                 double wheelvel = joints[i]->dq(); // Get the joint velocity
-                double wheelforce = std::min(std::max(-wheelvelgain * wheelvel,-10000.0),10000.0); // Calculate the force based on wheel
+                double wheelforce = std::min(std::max(-wheelvelgain * wheelvel,-2000.0),2000.0); // Calculate the force based on wheel
                 apply_limitedforce(wheelforce, i); // Apply force to the first four joints
                 euler.setZero(); // Reset euler angles after jump
             }else{

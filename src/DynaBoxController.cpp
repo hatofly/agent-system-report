@@ -27,8 +27,9 @@ class DynaBoxController1 : public SimpleController
 
     double prev_pitch = 0.0; // Previous pitch angle for control
     double target_pitch = 30*(3.14/180); // Target pitch angle for control
-    const double pitch_Kp = 150;//60はでかすぎ 50は足りない
-    const double pitch_Kd = pitch_Kp * 0.1; // Proportional and derivative gains for pitch control
+    const double pitch_Kp = 200;//60はでかすぎ 50は足りない
+    const double pitch_Kd = pitch_Kp * 0.5; // Proportional and derivative gains for pitch control
+    const double z_gain = 5; // Gain for equalizing z prismatic pos
     ros::Publisher pub_PT;
     ros::Publisher pub_IMU;
     Eigen::Vector3d euler; // Euler angles
@@ -37,23 +38,23 @@ class DynaBoxController1 : public SimpleController
     Eigen::Quaterniond imu_quat; // Quaternion for orientation
     Eigen::Quaterniond imu_quat_der; // Previous quaternion for orientation
     double simtime = 0.0; // Simulation time
-    const double jumptime = 5.0;
-    const double landtime = 5.0;
-    const double jumpcycle = jumptime + landtime; // Total time for one jump cycle
+    const double jumptime = 2.0;
+    const double landtime = 1.0;
+    const double resttime = 1.0; //gyroが積算してバグるので途中でちょいちょい休む
+    const double jumpcycle = jumptime + landtime; //; + resttime; // Total time for one jump cycle
     int stepcount = 0;
 
 public:
     virtual bool initialize(SimpleControllerIO *io) override
     {
         std::vector<std::string> jointnames = {
-            "REACTION_BASE_LEFT",
-            "REACTION_BASE_RIGHT",
+            "REACTION_BASE_CENTER",
             "REACTION_WHEEL_LEFT_1",
             "REACTION_WHEEL_LEFT_2",
             "REACTION_WHEEL_RIGHT_1",
             "REACTION_WHEEL_RIGHT_2",
         };
-        for (size_t i = 0; i < 6; ++i)
+        for (size_t i = 0; i < 5; ++i)
         {
             joints[i] = io->body()->link(jointnames[i]);
             joints[i]->setActuationMode(Link::JointTorque);
@@ -94,54 +95,25 @@ public:
 
         // Check if the robot is on the ground
         /*
-        if (translation.z() < LandHeightThreshold)
-        {
-            onLand = true;
-            // Apply Force to Joints
-            for (size_t i = 0; i < 2; ++i)
-            {
-                apply_limitedforce(1000, i); // Apply a force of maxForce to each joint
-            }
-        }
-        else
-        {
-            onLand = false;
-            for (size_t i = 0; i < 2; ++i)
-            {
-                apply_limitedforce(-100, i); // Apply a force of -10 to each joint
-            }
-        }
+
         */
+        /* 
+        // region:ROTATION CMOUT START
         // MARK: Jump Function(based on time)
-        /*
-        if (std::fmod(simtime, jumpcycle) < jumptime)
-        {
+        if (std::fmod(simtime, jumpcycle) < jumptime){
             // Apply Force to Joints
-            for (size_t i = 0; i < 2; ++i)
-            {
-                apply_limitedforce(500, i); // Apply a force of maxForce to each joint
-            }
+            apply_limitedforce(500,0); // Apply a force of maxForce to each joint
+        }else if (std::fmod(simtime, jumpcycle) < jumptime + landtime){
+            apply_limitedforce(100, 0);
+        }else{
+            apply_limitedforce(0, 0); // Reset the force for the first joint
         }
-        else
-        {
-            for (size_t i = 0; i < 2; ++i)
-            {
-                apply_limitedforce(-10, i); // Apply a force of -10 to each joint
-            }
-        }*/
-        // MARK: Jump Function(constant force)
-        /*
-        for (size_t i = 0; i < 2; ++i)
-        {
-            apply_limitedforce(500, i); // Apply a force of maxForce to each joint
-        }*/
         
+        // MARK: Jump Function(constant force)
+
+
         // MARK: Pose Control
-        // MARK:仮のz制御　limitを超えないようにあとで何とかして組み込もう
-        for (size_t i = 0; i < 2; ++i)
-        {
-            apply_limitedforce(100 - joints[i]->q()*100, i);
-        }
+
         //Eigen::Matrix3d R_temp = center->position().rotation();
         //double pitch = std::asin(R_temp(2, 0)); // Get the pitch angle
         euler  += gyro->w()*dt; // Accumulate angular velocity
@@ -151,12 +123,23 @@ public:
 
         double pitch_vel = (pitch - prev_pitch) / dt; // Get the pitch velocity
         double pitch_torque = - ( pitch_Kp * (pitch - target_pitch) + pitch_Kd * pitch_vel); // PD control
-        for (size_t i = 2; i < 6; ++i)
+        for (size_t i = 1; i < 5; ++i)
         {
-            apply_limitedforce(pitch_torque,i); // Reset the torque for the first four joints
+            if (std::fmod(simtime, jumpcycle) > jumptime + landtime){
+                // Apply force to the first four joints
+                apply_limitedforce(0, i); // Apply torque to the first four joints
+                euler.setZero(); // Reset euler angles after jump
+            }else{
+                apply_limitedforce(pitch_torque,i); // Reset the torque for the first four joints
+            }
         }
         // apply_limitedforce(pitch_torque, 1); // Apply torque to the first joint
         prev_pitch = pitch;
+
+       for (size_t i = 1; i < 5; ++i)
+        {
+            joints[i]->u() = 10.0; 
+        }
 
         // MARK: Publish Pitch and Translation
         std_msgs::Float64MultiArray msg;
@@ -169,7 +152,12 @@ public:
         pub_PT.publish(msg);
         // MARK: Simulation Time
         simtime += dt; // Increment simulation time
-
+        // endregion:ROTATION CMOUT END
+        */
+        for (size_t i = 1; i < 5; ++i)
+        {
+            apply_limitedforce(100,i); // Reset the torque for all joints
+        }
         return true;
     }
     // MARK: Power Limitter

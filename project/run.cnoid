@@ -23,21 +23,26 @@ items:
           class: BodyItem
           is_checked: true
           data:
-            file: "../../choreonoid/share/model/misc/floor.body"
+            file: "../../choreonoid/ext/vnoid/model/field2022/field2022_shorttrack.body"
             format: CHOREONOID-BODY
-            rootPosition: [ 0, 0, -0.1 ]
+            rootPosition: [ 0, 0, 0 ]
             rootAttitude: [
               1, 0, 0,
               0, 1, 0,
               0, 0, 1 ]
-            initialRootPosition: [ 0, 0, -0.1 ]
+            jointDisplacements: [
+              0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+              0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+              0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+              0, 0, 0, 0, 0 ]
+            initialRootPosition: [ 0, 0, 0 ]
             initialRootAttitude: [
               1, 0, 0,
               0, 1, 0,
               0, 0, 1 ]
             fix_root: true
             collisionDetection: true
-            selfCollisionDetection: true
+            selfCollisionDetection: false
             lock_location: false
             scene_sensitive: true
             zmp: [ 0, 0, 0 ]
@@ -46,7 +51,6 @@ items:
           name: "AISTSimulator"
           plugin: Body
           class: AISTSimulatorItem
-          is_selected: true
           is_checked: true
           data:
             time_step: 0.001
@@ -61,7 +65,6 @@ items:
             record_collision_data: false
             controller_options: ""
             block_scene_view_edit_mode: false
-            time_sync_items: [ 7 ]
             dynamicsMode: "Forward dynamics"
             integrationMode: semi-implicit_euler
             gravity: [ 0, 0, -9.80665 ]
@@ -81,6 +84,7 @@ items:
           name: "DynaBox"
           plugin: Body
           class: BodyItem
+          is_selected: true
           is_checked: true
           data:
             file: "../src/DynaBox.body"
@@ -92,7 +96,7 @@ items:
               0, 0, 1 ]
             jointDisplacements: [
               0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-              0, 0, 0, 0, 0, 0, 0, 0 ]
+              0, 0 ]
             initialRootPosition: [ 0, 0, 1 ]
             initialRootAttitude: [
               1, 0, 0,
@@ -106,7 +110,7 @@ items:
             zmp: [ 0, 0, 0 ]
           children:
             -
-              id: 6
+              id: 5
               name: "DynaBoxController"
               plugin: Body
               class: SimpleControllerItem
@@ -130,7 +134,7 @@ views:
     class: ItemTreeView
     mounted: true
     state:
-      expanded: [ 1, 4, 6 ]
+      expanded: [ 1, 5 ]
   -
     id: 2
     plugin: Base
@@ -162,9 +166,9 @@ views:
         -
           camera: [ System, Perspective ]
           isCurrent: true
-          eye: [ -2.03938, -10.7912, 3.11188 ]
-          direction: [ 0.27729, 0.944512, -0.17609 ]
-          up: [ 0.0496031, 0.168959, 0.984374 ]
+          eye: [ -4.0811, -19.4931, 33.9731 ]
+          direction: [ 0.15542, 0.571439, -0.805793 ]
+          up: [ 0.211477, 0.777547, 0.592197 ]
         -
           camera: [ System, Orthographic ]
           orthoHeight: 20
@@ -220,10 +224,6 @@ views:
     state:
       element_type: all
       listing_mode: tree
-      body_items:
-        -
-          id: 2
-          selected_links: [ 0 ]
   -
     id: 7
     plugin: Body
@@ -317,7 +317,7 @@ viewAreas:
             -
               type: splitter
               orientation: vertical
-              sizes: [ 698, 698 ]
+              sizes: [ 710, 709 ]
               children:
                 -
                   type: pane
@@ -329,7 +329,7 @@ viewAreas:
             -
               type: splitter
               orientation: vertical
-              sizes: [ 1048, 348 ]
+              sizes: [ 1065, 354 ]
               children:
                 -
                   type: pane
@@ -341,7 +341,7 @@ viewAreas:
         -
           type: splitter
           orientation: vertical
-          sizes: [ 305, 1091 ]
+          sizes: [ 310, 1109 ]
           children:
             -
               type: pane
@@ -349,7 +349,7 @@ viewAreas:
             -
               type: splitter
               orientation: vertical
-              sizes: [ 423, 663 ]
+              sizes: [ 430, 674 ]
               children:
                 -
                   type: pane

@@ -220,15 +220,28 @@ links:
   #   inertia: *WHEELINERTIA
   #   elements:
   #     Shape: *WHEELSHAPE
-  
-  - name: REACTION_BASE_LEFT
+  - name: REACTION_BASE_CENTER
     parent: CENTER
+    translation: [0, 0, 0]
+    jointType: prismatic
+    jointAxis: Z
+    jointId: 0
+    jointRange: &SLIDERANGE [-0.5, 0.5]
+    mass: 0.1
+    centerOfMass: [0, 0, 0]
+    inertia: [
+      0.00017, 0,   0,
+      0,   0.00017, 0,
+      0,   0,   0.00017 ]
+
+  - name: REACTION_BASE_LEFT
+    parent: REACTION_BASE_CENTER
     translation: [0, 0.07, 0]
     rotation: [0, 0, 1, 90]
     jointType: fixed
-    jointAxis: Z
-    jointId: 6
-    jointRange: &SLIDERANGE [-0.5, 0.5]
+    # jointId: 6
+    # jointAxis: Z
+    # jointRange: &SLIDERANGE [-0.5, 0.5]
     centerOfMass: [0, 0, 0]
     mass: &REACTION_BASE_MASS 2
     inertia: &REACTION_BASE_INERTIA [
@@ -287,13 +300,13 @@ links:
       Shape: *WHEELSHAPE
   
   - name: REACTION_BASE_RIGHT
-    parent: CENTER
+    parent: REACTION_BASE_CENTER
     translation: [0, -0.07, 0]
     rotation: [0, 0, 1, -90]
     jointType: fixed
-    jointAxis: Z
-    jointId: 9
-    jointRange: *SLIDERANGE
+    # jointAxis: Z
+    # jointId: 9
+    # jointRange: *SLIDERANGE
     centerOfMass: [0, 0, 0]
     mass: *REACTION_BASE_MASS
     inertia: *REACTION_BASE_INERTIA

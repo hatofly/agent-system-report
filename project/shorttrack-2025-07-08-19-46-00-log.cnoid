@@ -23,7 +23,7 @@ items:
           class: BodyItem
           is_checked: true
           data:
-            file: "shorttrack-2025-07-08-19-09-11-log/Floor/Floor.body"
+            file: "shorttrack-2025-07-08-19-46-00-log/Floor/Floor.body"
             format: CHOREONOID-BODY
             rootPosition: [ 0, 0, 0 ]
             rootAttitude: [
@@ -61,10 +61,10 @@ items:
               is_selected: true
               is_checked: true
               data:
-                file: "shorttrack-2025-07-08-19-09-11-log/shorttrack-2025-07-08-19-09-11"
+                file: "shorttrack-2025-07-08-19-46-00-log/shorttrack-2025-07-08-19-46-00"
                 format: CNOID-WORLD-LOG
                 timeStampSuffix: false
-                recordingFrameRate: 0.01
+                recordingFrameRate: 0.1
         -
           id: 5
           name: "DynaBox"
@@ -72,7 +72,7 @@ items:
           class: BodyItem
           is_checked: true
           data:
-            file: "shorttrack-2025-07-08-19-09-11-log/DynaBox/DynaBox.body"
+            file: "shorttrack-2025-07-08-19-46-00-log/DynaBox/DynaBox.body"
             format: CHOREONOID-BODY
             rootPosition: [ 0, 0, 1 ]
             rootAttitude: [
@@ -137,7 +137,7 @@ views:
         -
           camera: [ System, Perspective ]
           isCurrent: true
-          eye: [ -9.11399, -17.2584, 13.4148 ]
+          eye: [ -12.2912, -15.3671, 11.7644 ]
           direction: [ 0.618714, 0.631015, -0.467988 ]
           up: [ 0.327644, 0.334159, 0.883735 ]
         -
@@ -195,6 +195,11 @@ views:
     state:
       element_type: all
       listing_mode: tree
+      current_body_item: 2
+      body_items:
+        -
+          id: 2
+          selected_links: [ 0 ]
   -
     id: 7
     plugin: Body
@@ -220,7 +225,7 @@ views:
     mounted: true
 toolbars:
   "TimeBar":
-    current_time: 22.315
+    current_time: 0
     min_time: 0
     max_time: 57.398
     frame_rate: 1000
@@ -243,8 +248,8 @@ toolbars:
     lazyCollisionDetectionMode: true
 Body:
   "BodySelectionManager":
-    current_body_item: 5
-    current_link: "CENTER"
+    current_body_item: 2
+    current_link: "Base"
   "KinematicFaultChecker":
     checkJointPositions: true
     angleMargin: 0
@@ -328,7 +333,7 @@ viewAreas:
                 -
                   type: pane
                   views: [ 6, 5 ]
-                  current: 5
+                  current: 6
 layoutOfToolBars:
   rows:
     -
